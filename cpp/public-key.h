@@ -27,20 +27,10 @@ struct RSAKeyPair {
 };
 
 namespace rncryptopp::rsa {
-RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args);
-
-void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
-             QuickDataType *targetType, StringEncoding *targetEncoding);
-
-void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
-             QuickDataType *targetType);
-
-void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
-          QuickDataType *targetType, StringEncoding *targetEncoding);
-
-void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
-            QuickDataType *targetType);
-
-void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
-             QuickDataType *targetType, StringEncoding *targetEncoding);
+  RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args);
+  void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+  void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType);
+  void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+  void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType);
+  void recover(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
 } // namespace rncryptopp::rsa
