@@ -44,13 +44,6 @@ static def findNodeModules(baseDir) {
 def nodeModules = findNodeModules(projectDir);
 logger.warn("RNCryptopp: node_modules/ found at: ${nodeModules}");
 
-def reactNative = new File("$nodeModules/react-native")
-def reactNativeManifest = file("$reactNative/package.json")
-def reactNativeManifestAsJson = new JsonSlurper().parseText(reactNativeManifest.text)
-def reactNativeVersion = reactNativeManifestAsJson.version as String
-def (major, minor, patch) = reactNativeVersion.tokenize('.')
-def rnMinorVersion = Integer.parseInt(minor)
-
 def reactProperties = new Properties()
 file("$nodeModules/react-native/ReactAndroid/gradle.properties").withInputStream { reactProperties.load(it) }
 def REACT_NATIVE_VERSION = reactProperties.getProperty("VERSION_NAME").split("\\.")[1].toInteger()
@@ -181,9 +174,9 @@ dependencies {
   api 'com.facebook.react:react-native:+'
 
   //noinspection GradleDynamicVersion
-  extractHeaders("com.facebook.fbjni:fbjni:+:headers")
+  extractHeaders("com.facebook.fbjni:fbjni:0.4.0:headers")
   //noinspection GradleDynamicVersion
-  extractJNI("com.facebook.fbjni:fbjni:+")
+  extractJNI("com.facebook.fbjni:fbjni:0.4.0")
 
   def buildType = "debug"
   tasks.all({ task ->
