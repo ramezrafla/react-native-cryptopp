@@ -11,12 +11,22 @@ buildscript {
 
   dependencies {
     classpath 'com.android.tools.build:gradle:4.2.2'
-    classpath 'de.undercouch:gradle-download-task:4.1.2'
   }
 }
 
+def isNewArchitectureEnabled() {
+  // To opt-in for the New Architecture, you can either:
+  // - Set `newArchEnabled` to true inside the `gradle.properties` file
+  // - Invoke gradle with `-newArchEnabled=true`
+  // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
+  return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+}
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: "com.facebook.react"
+}
 apply plugin: 'com.android.library'
-apply plugin: 'de.undercouch.download'
+apply plugin: "kotlin-android"
 
 def getExtOrDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['RNCryptopp_' + name]
@@ -172,6 +182,7 @@ repositories {
 dependencies {
   // noinspection GradleDynamicVersion
   api 'com.facebook.react:react-native:+'
+  api 'com.facebook.fbjni:fbjni:0.4.0'
 
   //noinspection GradleDynamicVersion
   extractHeaders("com.facebook.fbjni:fbjni:0.4.0:headers")
