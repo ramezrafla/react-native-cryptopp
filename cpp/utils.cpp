@@ -4,7 +4,7 @@ namespace rncryptopp::utils {
 void toBase64(jsi::Runtime &rt, CppArgs *args, std::string *target,
               StringEncoding *targetEncoding) {
   if (args->size() < 2)
-    throwJSError(rt, "RNCryptopp: toBase64 invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: toBase64 invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
@@ -17,7 +17,7 @@ void toBase64(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void toBase64Url(jsi::Runtime &rt, CppArgs *args, std::string *target,
                  StringEncoding *targetEncoding) {
   if (args->size() < 2)
-    throwJSError(rt, "RNCryptopp: toBase64Url invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: toBase64Url invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
@@ -30,7 +30,7 @@ void toBase64Url(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void toHex(jsi::Runtime &rt, CppArgs *args, std::string *target,
            StringEncoding *targetEncoding) {
   if (args->size() < 2)
-    throwJSError(rt, "RNCryptopp: toHex invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: toHex invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(rt,
@@ -43,7 +43,7 @@ void toHex(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void toUtf8(jsi::Runtime &rt, CppArgs *args, std::string *target,
             StringEncoding *targetEncoding) {
   if (args->size() < 2)
-    throwJSError(rt, "RNCryptopp: toUtf8 invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: toUtf8 invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
     throw jsi::JSError(
@@ -56,10 +56,10 @@ void toUtf8(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void randomBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
                  QuickDataType *targetType) {
   if (args->size() != 2)
-    throwJSError(rt, "RNCryptopp: randomBytes invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: randomBytes invalid number of arguments");
 
   if (!isDataInteger(args->at(1)))
-    throwJSError(rt, "RNCryptopp: randomBytes size is not a number");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: randomBytes size is not a number");
   int size = (int)args->at(1).doubleOrIntValue;
 
   AutoSeededRandomPool prng;
@@ -73,7 +73,7 @@ void randomBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void stringToBytes(jsi::Runtime &rt, CppArgs *args, std::string *target,
                    QuickDataType *targetType) {
   if (args->size() < 2)
-    throwJSError(rt, "RNCryptopp: stringToBytes invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: stringToBytes invalid number of arguments");
 
   if (!isDataString(args->at(1)))
     throw jsi::JSError(rt, "RNCryptopp: stringToBytes data is not a string");

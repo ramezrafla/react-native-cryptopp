@@ -154,7 +154,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
             CppArgs args;
             parseJSIArgs(rt, functionArgs, count, &args);
             if (args[0].dataType != STRING)
-              throwJSError(rt, "RNCryptopp: invalid function name");
+              throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
             std::string fnName = args[0].stringValue;
 
             // Create result values returned to JS
@@ -225,7 +225,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
                         try {
                           auto args = *sharedArgs.get();
                           if (args[0].dataType != STRING)
-                            throwJSError(rt,
+                            throw facebook::jsi::JSError(rt,
                                          "RNCryptopp: invalid function name");
                           std::string fnName = args[0].stringValue;
 

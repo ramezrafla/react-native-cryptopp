@@ -56,18 +56,18 @@ namespace hmac {
 void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
               QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() < 4)
-    throwJSError(rt, "RNCryptopp: HMAC generate invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC generate invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: HMAC generate, data is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: HMAC generate, key is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: HMAC generate, hash is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC generate, hash is not a string");
 
   std::string data = args->at(1).stringValue;
   std::string hash = args->at(3).stringValue;
@@ -75,7 +75,7 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
   decodeJSIString(args->at(2), &key, ENCODING_HEX);
 
   if (!invokeWithHash<runGenerateWrapperHMAC>()(hash, &key, &data, target))
-    throwJSError(rt, "RNCryptopp: HMAC generate, invalid hash value");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC generate, invalid hash value");
 
   *targetType = args->at(1).dataType;
   *targetEncoding =
@@ -85,21 +85,21 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
             QuickDataType *targetType) {
   if (args->size() < 5)
-    throwJSError(rt, "RNCryptopp: HMAC verify invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC verify invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: HMAC verify, data is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: HMAC verify, key is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: HMAC verify, hash is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC verify, hash is not a string");
 
   if (!isDataStringOrAB(args->at(4)))
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: HMAC verify, mac is not a string or ArrayBuffer");
 
   auto macEncoding =
@@ -113,7 +113,7 @@ void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
 
   std::string dataAndMac = data + mac;
   if (!invokeWithHash<runVerifyWrapperHMAC>()(hash, &key, &dataAndMac, target))
-    throwJSError(rt, "RNCryptopp: HMAC verify, invalid hash value");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: HMAC verify, invalid hash value");
 
   *targetType = BOOLEAN;
 }
@@ -123,18 +123,18 @@ namespace cmac {
 void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
               QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() < 4)
-    throwJSError(rt, "RNCryptopp: CMAC generate invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC generate invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: CMAC generate, data is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: CMAC generate, key is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: CMAC generate, cipher is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC generate, cipher is not a string");
 
   std::string data = args->at(1).stringValue;
   std::string cipher = args->at(3).stringValue;
@@ -143,7 +143,7 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
 
   if (!invokeWithBlockCipher<runGenerateWrapperCMAC>()(cipher, true, true, &key,
                                                        &data, target))
-    throwJSError(rt, "RNCryptopp: CMAC generate, invalid hash value");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC generate, invalid hash value");
 
   *targetType = args->at(1).dataType;
   *targetEncoding =
@@ -153,21 +153,21 @@ void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
             QuickDataType *targetType) {
   if (args->size() < 5)
-    throwJSError(rt, "RNCryptopp: CMAC verify invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC verify invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: CMAC verify, data is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: CMAC verify, key is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: CMAC verify, cipher is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC verify, cipher is not a string");
 
   if (!isDataStringOrAB(args->at(4)))
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: CMAC verify, mac is not a string or ArrayBuffer");
 
   auto macEncoding =
@@ -183,7 +183,7 @@ void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
 
   if (!invokeWithBlockCipher<runVerifyWrapperCMAC>()(cipher, true, true, &key,
                                                      &dataAndMac, target))
-    throwJSError(rt, "RNCryptopp: CMAC verify, invalid hash value");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: CMAC verify, invalid hash value");
 
   *targetType = BOOLEAN;
 }

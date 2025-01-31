@@ -72,7 +72,7 @@ jsi::Value HashHostObject::get(jsi::Runtime &runtime,
             auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
                 hashName, &hashData, &result);
             if (!hasResult)
-              throwJSError(rt, "RNCryptopp: hash - invalid hash name.");
+              throw facebook::jsi::JSError(rt, "RNCryptopp: hash - invalid hash name.");
           }
           hashData = "";
           return jsi::String::createFromUtf8(rt, result);

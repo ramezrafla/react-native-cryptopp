@@ -6,14 +6,14 @@
 namespace rncryptopp::rsa {
 RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
   if (args->size() != 3)
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: RSA generateKeyPair invalid number of arguments");
 
   if (!isDataInteger(args->at(1)))
-    throwJSError(rt, "RNCryptopp: RSA generateKeyPair size is not a number");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA generateKeyPair size is not a number");
 
   if (!isDataInteger(args->at(2)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt,
         "RNCryptopp: RSA generateKeyPair public_e is not a number, use 65537");
 
@@ -71,16 +71,16 @@ RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
 void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
              QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 4)
-    throwJSError(rt, "RNCryptopp: RSA encrypt invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA encrypt invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(rt, "RNCryptopp: RSA encrypt data is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA encrypt data is not a string");
 
   if (!isDataString(args->at(2)))
-    throwJSError(rt, "RNCryptopp: RSA encrypt publicKey is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA encrypt publicKey is not a string");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: RSA encrypt scheme is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA encrypt scheme is not a string");
 
   std::string data = args->at(1).stringValue;
   std::string publicKeyString = args->at(2).stringValue;
@@ -105,7 +105,7 @@ void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
     StringSource(data, true,
                  new PK_EncryptorFilter(rng, e, new StringSink(*target)));
   } else {
-    throwJSError(rt, "RNCryptopp: RSA encrypt invalid scheme");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA encrypt invalid scheme");
   }
 
   *targetType = args->at(1).dataType;
@@ -115,16 +115,16 @@ void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
              QuickDataType *targetType) {
   if (args->size() != 4)
-    throwJSError(rt, "RNCryptopp: RSA decrypt invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(rt, "RNCryptopp: RSA decrypt data is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt data is not a string");
 
   if (!isDataString(args->at(2)))
-    throwJSError(rt, "RNCryptopp: RSA decrypt privateKey is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt privateKey is not a string");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
 
   std::string privateKeyString = args->at(2).stringValue;
   std::string encryptScheme = args->at(3).stringValue;
@@ -150,10 +150,10 @@ void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
       StringSource(data, true,
                    new PK_DecryptorFilter(rng, e, new StringSink(*target)));
     } else {
-      throwJSError(rt, "RNCryptopp: RSA decrypt invalid scheme");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt invalid scheme");
     }
   } catch (const std::exception &e) {
-    throwJSError(rt, "RNCryptopp: RSA decryption failed");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decryption failed");
   }
 
   *targetType = args->at(1).dataType;
@@ -173,16 +173,16 @@ void exec_sign(std::string *data, CryptoPP::RSA::PrivateKey *privateKey,
 void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
           QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 4)
-    throwJSError(rt, "RNCryptopp: RSA sign invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(rt, "RNCryptopp: RSA sign data is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign data is not a string");
 
   if (!isDataString(args->at(2)))
-    throwJSError(rt, "RNCryptopp: RSA sign privateKey is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign privateKey is not a string");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA decrypt scheme is not a string");
 
   std::string data = args->at(1).stringValue;
   std::string privateKeyString = args->at(2).stringValue;
@@ -211,7 +211,7 @@ void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
   else if (signScheme == "PSS_Whirlpool")
     exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, target);
   else
-    throwJSError(rt, "RNCryptopp: RSA sign invalid scheme");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign invalid scheme");
 
   *targetType = args->at(1).dataType;
   *targetEncoding = ENCODING_BASE64;
@@ -220,19 +220,19 @@ void sign(jsi::Runtime &rt, CppArgs *args, std::string *target,
 void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
             QuickDataType *targetType) {
   if (args->size() != 5)
-    throwJSError(rt, "RNCryptopp: RSA verify invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(rt, "RNCryptopp: RSA verify data is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify data is not a string");
 
   if (!isDataString(args->at(2)))
-    throwJSError(rt, "RNCryptopp: RSA verify publicKey is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify publicKey is not a string");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt, "RNCryptopp: RSA verify signature scheme is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify signature scheme is not a string");
 
   if (!isDataString(args->at(4)))
-    throwJSError(rt, "RNCryptopp: RSA verify signature is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify signature is not a string");
 
   std::string data = args->at(1).stringValue;
   std::string publicKeyString = args->at(2).stringValue;
@@ -273,7 +273,7 @@ void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
                                     (const byte *)signature.data(),
                                     signature.size());
   } else
-    throwJSError(rt, "RNCryptopp: RSA verify invalid scheme");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid scheme");
 
   *target = result;
   *targetType = jsiHelper::BOOLEAN;
@@ -282,17 +282,17 @@ void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
 void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
              QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 4)
-    throwJSError(rt, "RNCryptopp: RSA recover invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA recover invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throwJSError(
+    throw facebook::jsi::JSError(
         rt, "RNCryptopp: RSA recover signature is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(2)))
-    throwJSError(rt, "RNCryptopp: RSA recover publicKey is not a string");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA recover publicKey is not a string");
 
   if (!isDataString(args->at(3)))
-    throwJSError(rt,
+    throw facebook::jsi::JSError(rt,
                  "RNCryptopp: RSA recover signature scheme is not a string");
 
   std::string publicKeyString = args->at(2).stringValue;
@@ -326,10 +326,10 @@ void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
                                           THROW_EXCEPTION | PUT_MESSAGE));
     } else {
       // Will not be caught by std::exception &e bellow
-      throwJSError(rt, "RNCryptopp: RSA recover invalid scheme");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: RSA recover invalid scheme");
     }
   } catch (const std::exception &e) {
-    throwJSError(rt, "RNCryptopp: RSA signatures do not match");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: RSA signatures do not match");
   }
 
   *targetType = args->at(1).dataType;

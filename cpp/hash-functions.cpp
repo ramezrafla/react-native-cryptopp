@@ -4,11 +4,11 @@ namespace rncryptopp::hash {
 
 void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
   if (args->size() != 3)
-    throwJSError(rt, "RNCryptopp: hash invalid number of arguments");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: hash invalid number of arguments");
 
   QuickValue data = args->at(2);
   if (!isDataStringOrAB(data))
-    throwJSError(rt, "RNCryptopp: hash data is not a string or ArrayBuffer");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: hash data is not a string or ArrayBuffer");
 
   std::string hash_type = args->at(1).stringValue;
   if (hash_type == "SipHash_2_4_64") {
@@ -36,7 +36,7 @@ void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
     auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
         hash_type, &data.stringValue, result);
     if (!hasResult)
-      throwJSError(rt, "RNCryptopp: hash - invalid hash name.");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: hash - invalid hash name.");
   }
 }
 } // namespace rncryptopp::hash
