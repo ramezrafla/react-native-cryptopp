@@ -210,8 +210,7 @@ void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *t
   *targetEncoding = ENCODING_BASE64;
 }
 
-void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
-            QuickDataType *targetType) {
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType) {
   if (args->size() != 5)
     throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid number of arguments");
 
