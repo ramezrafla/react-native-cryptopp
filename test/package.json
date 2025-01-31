@@ -1,0 +1,49 @@
+{
+  "name": "react-native-cryptopp-test",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "postinstall": "cd ios && pod install && cd ..",
+    "build": "detox build",
+    "test": "detox test",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "react": "17.0.2",
+    "react-native": "0.68.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/runtime": "^7.17.9",
+    "@types/jasmine": "^4.0.3",
+    "@types/jest": "^27.4.1",
+    "@types/react-native": "^0.67.6",
+    "@types/react-test-renderer": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "babel-jest": "^27.5.1",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "detox": "^19.6.5",
+    "metro-react-native-babel-preset": "^0.70.2",
+    "react-test-renderer": "17.0.2",
+    "ts-jest": "^27.1.4",
+    "typescript": "^4.6.3"
+  },
+  "resolutions": {
+    "@types/react": "^17"
+  },
+  "jest": {
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}
