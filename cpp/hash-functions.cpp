@@ -13,15 +13,15 @@ void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
   std::string hash_type = args->at(1).stringValue;
   if (hash_type == "SipHash_2_4_64") {
     SipHash<2, 4, false> hash;
-    StringSource(data.stringValue, true,
-                 new HashFilter(hash, new HexEncoder(new StringSink(*result))));
+    StringSource(data.stringValue, true, new HashFilter(hash, new HexEncoder(new StringSink(*result))));
     return;
-  } else if (hash_type == "SipHash_4_8_128") {
+  }
+  else if (hash_type == "SipHash_4_8_128") {
     SipHash<4, 8, true> hash;
-    StringSource(data.stringValue, true,
-                 new HashFilter(hash, new HexEncoder(new StringSink(*result))));
+    StringSource(data.stringValue, true, new HashFilter(hash, new HexEncoder(new StringSink(*result))));
     return;
-  } else if (hash_type == "CRC32") {
+  }
+  else if (hash_type == "CRC32") {
     CRC32 hash;
     word32 digest = 0;
     hash.CalculateDigest(
@@ -32,7 +32,8 @@ void hash(jsi::Runtime &rt, CppArgs *args, std::string *result) {
     ss << std::hex << digest;
     *result = ss.str();
     return;
-  } else {
+  }
+  else {
     auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
         hash_type, &data.stringValue, result);
     if (!hasResult)

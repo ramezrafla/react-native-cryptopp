@@ -44,9 +44,7 @@ QuickValue createIntegerQuickValue(int value);
 QuickValue createInt64QuickValue(long long value);
 QuickValue createDoubleQuickValue(double value);
 
-void parseJSIArgs(jsi::Runtime &rt, const jsi::Value *args, size_t count,
-                  CppArgs *target);
-
+void parseJSIArgs(jsi::Runtime &rt, const jsi::Value *args, size_t count, CppArgs *target);
 bool isDataString(QuickValue &value);
 bool isDataStringOrAB(QuickValue &value);
 bool isDataInteger(QuickValue &value);

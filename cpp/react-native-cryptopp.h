@@ -20,5 +20,4 @@ using namespace facebook;
 using namespace rncryptopp;
 using namespace rncryptopp::jsiHelper;
 
-void rncryptopp_install(jsi::Runtime &jsiRuntime,
-                        std::shared_ptr<react::CallInvoker> jsCallInvoker);
+void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInvoker> jsCallInvoker);

@@ -39,6 +39,5 @@ private:
   std::string hashData;
 };
 
-jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
-                                const jsi::Value *args, size_t count);
+jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count);
 } // namespace rncryptopp::HostObjects

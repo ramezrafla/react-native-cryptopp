@@ -4,10 +4,13 @@
 
 std::shared_ptr<react::CallInvoker> invoker;
 
-void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
-                     bool *boolTarget, std::string *stringTarget,
-                     QuickDataType *targetType,
-                     StringEncoding *targetEncoding) {
+void execCppFunction(jsi::Runtime &rt,
+                      CppArgs *args,
+                      std::string &fnName,
+                      bool *boolTarget,
+                      std::string *stringTarget,
+                      QuickDataType *targetType,
+                      StringEncoding *targetEncoding) {
   /*
   Hashes
   */
@@ -17,41 +20,29 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
   AES and AES candidates
   */
   else if (fnName == "AES_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::AES>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "AES_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::AES>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "RC6_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::RC6>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::RC6>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "RC6_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::RC6>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::RC6>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "MARS_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::MARS>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::MARS>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "MARS_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::MARS>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::MARS>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "Twofish_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::Twofish>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::Twofish>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "Twofish_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::Twofish>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::Twofish>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "Serpent_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::Serpent>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::Serpent>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "Serpent_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::Serpent>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::Serpent>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "CAST256_encrypt")
-    rncryptopp::aescandidates::encrypt<CryptoPP::CAST256>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::encrypt<CryptoPP::CAST256>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "CAST256_decrypt")
-    rncryptopp::aescandidates::decrypt<CryptoPP::CAST256>(
-        rt, args, stringTarget, targetType, targetEncoding);
+    rncryptopp::aescandidates::decrypt<CryptoPP::CAST256>(rt, args, stringTarget, targetType, targetEncoding);
   /*
   Insecure
   */
@@ -66,13 +57,11 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
    * Message authentication codes
    */
   else if (fnName == "HMAC_generate")
-    rncryptopp::hmac::generate(rt, args, stringTarget, targetType,
-                               targetEncoding);
+    rncryptopp::hmac::generate(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "HMAC_verify")
     rncryptopp::hmac::verify(rt, args, boolTarget, targetType);
   else if (fnName == "CMAC_generate")
-    rncryptopp::cmac::generate(rt, args, stringTarget, targetType,
-                               targetEncoding);
+    rncryptopp::cmac::generate(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "CMAC_verify")
     rncryptopp::cmac::verify(rt, args, boolTarget, targetType);
 
@@ -96,27 +85,21 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
    * Public Key Derivation Functions
    */
   else if (fnName == "key_derivation_HKDF")
-    rncryptopp::keyderivation::hkdf(rt, args, stringTarget, targetType,
-                                    targetEncoding);
+    rncryptopp::keyderivation::hkdf(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "key_derivation_PKCS12_PBKDF")
-    rncryptopp::keyderivation::pbkdf12(rt, args, stringTarget, targetType,
-                                       targetEncoding);
+    rncryptopp::keyderivation::pbkdf12(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "key_derivation_PKCS5_PBKDF1")
-    rncryptopp::keyderivation::pkcs5_pbkdf1(rt, args, stringTarget, targetType,
-                                            targetEncoding);
+    rncryptopp::keyderivation::pkcs5_pbkdf1(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "key_derivation_PKCS5_PBKDF2")
-    rncryptopp::keyderivation::pkcs5_pbkdf2(rt, args, stringTarget, targetType,
-                                            targetEncoding);
+    rncryptopp::keyderivation::pkcs5_pbkdf2(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "key_derivation_Scrypt")
-    rncryptopp::keyderivation::scrypt(rt, args, stringTarget, targetType,
-                                      targetEncoding);
+    rncryptopp::keyderivation::scrypt(rt, args, stringTarget, targetType, targetEncoding);
 
   /*
   Public-key cryptography
   */
   else if (fnName == "rsa_encrypt")
-    rncryptopp::rsa::encrypt(rt, args, stringTarget, targetType,
-                             targetEncoding);
+    rncryptopp::rsa::encrypt(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "rsa_decrypt")
     rncryptopp::rsa::decrypt(rt, args, stringTarget, targetType);
   else if (fnName == "rsa_sign")
@@ -124,12 +107,10 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
   else if (fnName == "rsa_verify")
     rncryptopp::rsa::verify(rt, args, boolTarget, targetType);
   else if (fnName == "rsa_recover")
-    rncryptopp::rsa::recover(rt, args, stringTarget, targetType,
-                             targetEncoding);
+    rncryptopp::rsa::recover(rt, args, stringTarget, targetType, targetEncoding);
 }
 
-void rncryptopp_install(jsi::Runtime &jsiRuntime,
-                        std::shared_ptr<react::CallInvoker> jsCallInvoker) {
+void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInvoker> jsCallInvoker) {
   auto pool = std::make_shared<ThreadPool>();
   invoker = std::move(jsCallInvoker);
 
@@ -141,7 +122,8 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
                      jsi::Function::createFromHostFunction(
                          jsiRuntime,
                          jsi::PropNameID::forAscii(jsiRuntime, "createHash"), 1,
-                         rncryptopp::HostObjects::createHashHostObject));
+                         rncryptopp::HostObjects::createHashHostObject)
+                    );
 
   // Individual hashes
   module.setProperty(
@@ -181,14 +163,11 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
             }
 
             // All other functionality executed here:
-            execCppFunction(rt, &args, fnName, &booleanResult, &stringResult,
-                            &resultType, &resultEncoding);
+            execCppFunction(rt, &args, fnName, &booleanResult, &stringResult, &resultType, &resultEncoding);
 
-            if (resultType == jsiHelper::BOOLEAN)
-              return jsi::Value(booleanResult);
+            if (resultType == jsiHelper::BOOLEAN) return jsi::Value(booleanResult);
 
-            return returnStringOrArrayBuffer(rt, stringResult, resultType,
-                                             resultEncoding);
+            return returnStringOrArrayBuffer(rt, stringResult, resultType, resultEncoding);
           }));
 
   /*************************************************************************************************
@@ -199,14 +178,12 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
       jsiRuntime, "exec_async",
       jsi::Function::createFromHostFunction(
           jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
-          [pool](jsi::Runtime &rt, const jsi::Value &thisValue,
-                 const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+          [pool](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
             CppArgs args;
             parseJSIArgs(rt, functionArgs, count, &args);
             auto sharedArgs = std::make_shared<CppArgs>(args);
             auto argCount = std::make_shared<size_t>(count);
-            auto promiseContructor =
-                rt.global().getPropertyAsFunction(rt, "Promise");
+            auto promiseContructor = rt.global().getPropertyAsFunction(rt, "Promise");
             auto promise = promiseContructor.callAsConstructor(
                 rt,
                 jsi::Function::createFromHostFunction(
@@ -215,18 +192,14 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
                      argCount](jsi::Runtime &rt, const jsi::Value &thisValue,
                                const jsi::Value *promiseArgs,
                                size_t promiseCount) -> jsi::Value {
-                      auto resolve =
-                          std::make_shared<jsi::Value>(rt, promiseArgs[0]);
-                      auto reject =
-                          std::make_shared<jsi::Value>(rt, promiseArgs[1]);
+                      auto resolve = std::make_shared<jsi::Value>(rt, promiseArgs[0]);
+                      auto reject = std::make_shared<jsi::Value>(rt, promiseArgs[1]);
 
-                      auto task = [&rt, resolve, reject, sharedArgs,
-                                   argCount]() {
+                      auto task = [&rt, resolve, reject, sharedArgs, argCount]() {
                         try {
                           auto args = *sharedArgs.get();
                           if (args[0].dataType != STRING)
-                            throw facebook::jsi::JSError(rt,
-                                         "RNCryptopp: invalid function name");
+                            throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
                           std::string fnName = args[0].stringValue;
 
                           // Create result values returned to JS
@@ -238,74 +211,51 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
                           // RSA key pair generation is the only function
                           // returning an Object
                           if (fnName == "rsa_generateKeyPair") {
-                            auto keyPair =
-                                rncryptopp::rsa::generateKeyPair(rt, &args);
-                            auto sharedKeyPair =
-                                std::make_shared<RSAKeyPair>(keyPair);
+                            auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
+                            auto sharedKeyPair = std::make_shared<RSAKeyPair>(keyPair);
 
                             invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
                               jsi::Object params = jsi::Object(rt);
-                              params.setProperty(rt, "n",
-                                                 (*sharedKeyPair.get()).n);
-                              params.setProperty(rt, "p",
-                                                 (*sharedKeyPair.get()).p);
-                              params.setProperty(rt, "q",
-                                                 (*sharedKeyPair.get()).q);
-                              params.setProperty(rt, "d",
-                                                 (*sharedKeyPair.get()).d);
-                              params.setProperty(rt, "e",
-                                                 (*sharedKeyPair.get()).e);
+                              params.setProperty(rt, "n", (*sharedKeyPair.get()).n);
+                              params.setProperty(rt, "p", (*sharedKeyPair.get()).p);
+                              params.setProperty(rt, "q", (*sharedKeyPair.get()).q);
+                              params.setProperty(rt, "d", (*sharedKeyPair.get()).d);
+                              params.setProperty(rt, "e", (*sharedKeyPair.get()).e);
 
                               jsi::Object result = jsi::Object(rt);
-                              result.setProperty(
-                                  rt, "public",
-                                  (*sharedKeyPair.get()).public_key);
-                              result.setProperty(
-                                  rt, "private",
-                                  (*sharedKeyPair.get()).private_key);
+                              result.setProperty(rt, "public", (*sharedKeyPair.get()).public_key);
+                              result.setProperty(rt, "private", (*sharedKeyPair.get()).private_key);
                               result.setProperty(rt, "params", params);
 
-                              resolve->asObject(rt).asFunction(rt).call(rt,
-                                                                        result);
+                              resolve->asObject(rt).asFunction(rt).call(rt, result);
                             });
                             return;
                           }
 
                           // All other functionality executed here:
-                          execCppFunction(rt, &args, fnName, &booleanResult,
-                                          &stringResult, &resultType,
-                                          &resultEncoding);
+                          execCppFunction(rt, &args, fnName, &booleanResult, &stringResult, &resultType, &resultEncoding);
 
-                          auto sharedResultEncoding =
-                              std::make_shared<StringEncoding>(resultEncoding);
-                          auto sharedResultType =
-                              std::make_shared<QuickDataType>(resultType);
-                          auto sharedStringResult =
-                              std::make_shared<std::string>(stringResult);
-                          auto sharedBooleanResult =
-                              std::make_shared<bool>(booleanResult);
+                          auto sharedResultEncoding = std::make_shared<StringEncoding>(resultEncoding);
+                          auto sharedResultType = std::make_shared<QuickDataType>(resultType);
+                          auto sharedStringResult = std::make_shared<std::string>(stringResult);
+                          auto sharedBooleanResult = std::make_shared<bool>(booleanResult);
 
-                          invoker->invokeAsync([&rt, resolve,
+                          invoker->invokeAsync([&rt,
+                                                resolve,
                                                 sharedResultEncoding,
                                                 sharedResultType,
                                                 sharedStringResult,
                                                 sharedBooleanResult] {
                             if (*sharedResultType.get() == jsiHelper::BOOLEAN) {
-                              resolve->asObject(rt).asFunction(rt).call(
-                                  rt, jsi::Value(*sharedBooleanResult.get()));
+                              resolve->asObject(rt).asFunction(rt).call(rt, jsi::Value(*sharedBooleanResult.get()));
                             }
 
                             resolve->asObject(rt).asFunction(rt).call(
-                                rt, returnStringOrArrayBuffer(
-                                        rt, *sharedStringResult.get(),
-                                        *sharedResultType.get(),
-                                        *sharedResultEncoding.get()));
+                                rt, returnStringOrArrayBuffer(rt, *sharedStringResult.get(), *sharedResultType.get(), *sharedResultEncoding.get()));
                           });
                         } catch (std::exception &exc) {
                           invoker->invokeAsync([&rt, reject, &exc] {
-                            reject->asObject(rt).asFunction(rt).call(
-                                rt,
-                                jsi::String::createFromUtf8(rt, exc.what()));
+                            reject->asObject(rt).asFunction(rt).call(rt, jsi::String::createFromUtf8(rt, exc.what()));
                           });
                         }
                       };
@@ -315,6 +265,5 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime,
             return promise;
           }));
 
-  jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule",
-                                  std::move(module));
+  jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
 }

@@ -10,8 +10,7 @@ void md2(jsi::Runtime &rt, CppArgs *args, std::string &target) {
     throw facebook::jsi::JSError(rt, "RNCryptopp: md2 sata is not a string");
   }
   Weak::MD2 hash;
-  StringSource(args->at(1).stringValue, true,
-               new HashFilter(hash, new HexEncoder(new StringSink(target))));
+  StringSource(args->at(1).stringValue, true, new HashFilter(hash, new HexEncoder(new StringSink(target))));
 }
 
 void md4(jsi::Runtime &rt, CppArgs *args, std::string &target) {
@@ -22,8 +21,7 @@ void md4(jsi::Runtime &rt, CppArgs *args, std::string &target) {
     throw facebook::jsi::JSError(rt, "RNCryptopp: Data is not a string");
   }
   Weak::MD4 hash;
-  StringSource(args->at(1).stringValue, true,
-               new HashFilter(hash, new HexEncoder(new StringSink(target))));
+  StringSource(args->at(1).stringValue, true, new HashFilter(hash, new HexEncoder(new StringSink(target))));
 }
 
 void md5(jsi::Runtime &rt, CppArgs *args, std::string &target) {
@@ -34,8 +32,7 @@ void md5(jsi::Runtime &rt, CppArgs *args, std::string &target) {
     throw facebook::jsi::JSError(rt, "RNCryptopp: Data is not a string");
   }
   Weak::MD5 hash;
-  StringSource(args->at(1).stringValue, true,
-               new HashFilter(hash, new HexEncoder(new StringSink(target))));
+  StringSource(args->at(1).stringValue, true, new HashFilter(hash, new HexEncoder(new StringSink(target))));
 }
 
 } // namespace rncryptopp::insecure

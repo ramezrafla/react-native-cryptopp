@@ -21,19 +21,15 @@ jsi::Value HashHostObject::get(jsi::Runtime &runtime,
   if (propName == "update") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forAscii(runtime, funcName), 1,
-        [this](jsi::Runtime &rt, const jsi::Value &thisVal,
-               const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
           CppArgs args;
           parseJSIArgs(rt, functionArgs, count, &args);
 
           if (args.empty())
-            throw jsi::JSError(rt,
-                               "RNCryptopp: update() expects 1 argument: data");
+            throw jsi::JSError(rt, "RNCryptopp: update() expects 1 argument: data");
 
-          if (args.at(0).dataType != STRING &&
-              args.at(0).dataType != ARRAY_BUFFER)
-            throw jsi::JSError(rt, "RNCryptopp: update() first argument must "
-                                   "be a string or ArrayBuffer");
+          if (args.at(0).dataType != STRING && args.at(0).dataType != ARRAY_BUFFER)
+            throw jsi::JSError(rt, "RNCryptopp: update() first argument must be a string or ArrayBuffer");
 
           std::string newData = args.at(0).stringValue;
           hashData = hashData + newData;
@@ -44,33 +40,27 @@ jsi::Value HashHostObject::get(jsi::Runtime &runtime,
   if (propName == "finalize") {
     return jsi::Function::createFromHostFunction(
         runtime, jsi::PropNameID::forAscii(runtime, funcName), 0,
-        [this](jsi::Runtime &rt, const jsi::Value &thisVal,
-               const jsi::Value *args, size_t count) -> jsi::Value {
+        [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
           std::string result;
           if (hashName == "SipHash_2_4_64") {
             SipHash<2, 4, false> hash;
-            StringSource(
-                hashData, true,
-                new HashFilter(hash, new HexEncoder(new StringSink(result))));
-          } else if (hashName == "SipHash_4_8_128") {
+            StringSource(hashData, true, new HashFilter(hash, new HexEncoder(new StringSink(result))));
+          }
+          else if (hashName == "SipHash_4_8_128") {
             SipHash<4, 8, true> hash;
-            StringSource(
-                hashData, true,
-                new HashFilter(hash, new HexEncoder(new StringSink(result))));
+            StringSource(hashData, true, new HashFilter(hash, new HexEncoder(new StringSink(result))));
 
-          } else if (hashName == "CRC32") {
+          }
+          else if (hashName == "CRC32") {
             CRC32 hash;
             word32 digest = 0;
-            hash.CalculateDigest(
-                reinterpret_cast<CryptoPP::byte *>(&digest),
-                reinterpret_cast<CryptoPP::byte const *>(hashData.data()),
-                hashData.size());
+            hash.CalculateDigest(reinterpret_cast<CryptoPP::byte *>(&digest), reinterpret_cast<CryptoPP::byte const *>(hashData.data()), hashData.size());
             std::stringstream ss;
             ss << std::hex << digest;
             result = ss.str();
-          } else {
-            auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(
-                hashName, &hashData, &result);
+          }
+          else {
+            auto hasResult = invokeWithHash<rncryptopp::hash::calculate_hash>()(hashName, &hashData, &result);
             if (!hasResult)
               throw facebook::jsi::JSError(rt, "RNCryptopp: hash - invalid hash name.");
           }
@@ -81,8 +71,7 @@ jsi::Value HashHostObject::get(jsi::Runtime &runtime,
   return jsi::Value::undefined();
 }
 
-jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
-                                const jsi::Value *functionArgs, size_t count) {
+jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) {
   CppArgs args;
   parseJSIArgs(rt, functionArgs, count, &args);
 
@@ -91,8 +80,7 @@ jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue,
 
   std::string hash = args.at(0).stringValue;
 
-  auto instance =
-      std::make_shared<rncryptopp::HostObjects::HashHostObject>(hash);
+  auto instance = std::make_shared<rncryptopp::HostObjects::HashHostObject>(hash);
   return jsi::Object::createFromHostObject(rt, instance);
 }
 } // namespace rncryptopp::HostObjects

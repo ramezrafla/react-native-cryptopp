@@ -160,18 +160,15 @@ void pkcs5_pbkdf1(jsi::Runtime &rt, CppArgs *args, std::string *target,
   *targetEncoding = ENCODING_HEX;
 }
 
-void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target,
-                  QuickDataType *targetType, StringEncoding *targetEncoding) {
+void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 5)
     throw facebook::jsi::JSError(rt, "RNCryptopp: pkcs5_pbkdf2 invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throw facebook::jsi::JSError(
-        rt, "RNCryptopp: pkcs5_pbkdf2 password is not a string or ArrayBuffer");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: pkcs5_pbkdf2 password is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
-    throw facebook::jsi::JSError(
-        rt, "RNCryptopp: pkcs5_pbkdf2 salt is not a string or ArrayBuffer");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: pkcs5_pbkdf2 salt is not a string or ArrayBuffer");
 
   if (!isDataString(args->at(3)))
     throw facebook::jsi::JSError(rt, "RNCryptopp: pkcs5_pbkdf2 hash is not a string");
@@ -184,22 +181,19 @@ void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target,
   std::string hash = args->at(3).stringValue;
   int numIter = args->at(4).doubleOrIntValue;
 
-  if (!invokeWithHash<derivePKCS5_PBKDF2_HMAC_wrapper>()(hash, &pass, &salt,
-                                                         numIter, target))
+  if (!invokeWithHash<derivePKCS5_PBKDF2_HMAC_wrapper>()(hash, &pass, &salt, numIter, target))
     throw facebook::jsi::JSError(rt, "RNCryptopp: pkcs5_pbkdf1 hash invalid hash value");
 
   *targetType = args->at(1).dataType;
   *targetEncoding = ENCODING_HEX;
 }
 
-void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
-            QuickDataType *targetType, StringEncoding *targetEncoding) {
+void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 7)
     throw facebook::jsi::JSError(rt, "RNCryptopp: scrypt invalid number of arguments");
 
   if (!isDataStringOrAB(args->at(1)))
-    throw facebook::jsi::JSError(rt,
-                 "RNCryptopp: scrypt password is not a string or ArrayBuffer");
+    throw facebook::jsi::JSError(rt, "RNCryptopp: scrypt password is not a string or ArrayBuffer");
 
   if (!isDataStringOrAB(args->at(2)))
     throw facebook::jsi::JSError(rt, "RNCryptopp: scrypt salt is not a string or ArrayBuffer");

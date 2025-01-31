@@ -26,9 +26,7 @@ ThreadPool::~ThreadPool() {
   // Wake up all the threads, so they can finish and be joined
   workQueueConditionVariable.notify_all();
   for (auto &thread : threads) {
-    if (thread.joinable()) {
-      thread.join();
-    }
+    if (thread.joinable()) { thread.join(); }
   }
 }
 
