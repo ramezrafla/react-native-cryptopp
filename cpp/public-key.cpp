@@ -15,7 +15,7 @@ RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
     throw facebook::jsi::JSError(rt, "RNCryptopp: RSA generateKeyPair public_e is not a number, use 65537");
 
   int size = args->at(1).doubleOrIntValue;
-  int public_e = args->at(2).doubleOrIntValue;s
+  int public_e = args->at(2).doubleOrIntValue;
 
   // Generate Parameters
   AutoSeededRandomPool rng;
@@ -159,7 +159,9 @@ void exec_sign(std::string *data, CryptoPP::RSA::PrivateKey *privateKey, std::st
   AutoSeededRandomPool rng;
   typename SCHEME::Signer signer(*privateKey);
 
-  StringSource(*data, true, new SignerFilter(rng, signer, new StringSink(*result), putMessage));
+  StringSource(
+      *data, true,
+      new SignerFilter(rng, signer, new StringSink(*result), putMessage));
 }
 
 void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
@@ -208,7 +210,8 @@ void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *t
   *targetEncoding = ENCODING_BASE64;
 }
 
-void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType) {
+void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
+            QuickDataType *targetType) {
   if (args->size() != 5)
     throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid number of arguments");
 
@@ -265,15 +268,15 @@ void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *target
     result = verifier.VerifyMessage((const byte *)data.data(), data.size(),
                                     (const byte *)signature.data(),
                                     signature.size());
-  }
-  else
+  } else
     throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid scheme");
 
   *target = result;
   *targetType = jsiHelper::BOOLEAN;
 }
 
-void recover(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
+void recover(jsi::Runtime &rt, CppArgs *args, std::string *target,
+             QuickDataType *targetType, StringEncoding *targetEncoding) {
   if (args->size() != 4)
     throw facebook::jsi::JSError(rt, "RNCryptopp: RSA recover invalid number of arguments");
 
