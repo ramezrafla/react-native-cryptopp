@@ -91,13 +91,6 @@ target_include_directories(
 
 )
 
-# Find JNI
-find_library(
-        FBJNI_LIB
-        fbjni
-        PATHS ${LIBRN_DIR}
-        NO_CMAKE_FIND_ROOT_PATH
-)
 
 # Find LOG_LIB
 find_library(
@@ -122,6 +115,5 @@ target_link_libraries(
   cryptopp
   ${JSI_LIB}
   ${LOG_LIB}
-  ${FBJNI_LIB}
   android
 )
