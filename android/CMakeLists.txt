@@ -86,7 +86,6 @@ set_target_properties(
 target_link_libraries(
   ${PACKAGE_NAME}
   cryptopp
-  android
   ${JSI_LIB}
   ${LOG_LIB}
   android
