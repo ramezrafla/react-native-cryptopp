@@ -1,3 +1,4 @@
+project(rncryptopp)
 cmake_minimum_required(VERSION 3.9.0)
 
 set (CMAKE_VERBOSE_MAKEFILE ON)
@@ -19,15 +20,10 @@ execute_process(
         ERROR_FILE ${CMAKE_CURRENT_SOURCE_DIR}/build/cryptopp_error.txt
 )
 
-# TODO: find a way to include headers only,
-# TODO: this includes everything,
-# TODO: even headers in cpp/cryptopp
-file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
 file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
-file(GLOB RN_CRYPTOPP_HO_FILES "../cpp/host_objects/*.cpp")
-file(GLOB RN_CRYPTOPP_HPP_FILES "../cpp/*.hpp")
+file(GLOB RN_CRYPTOPP_HEADERS "../cpp")
 file(GLOB LIBRN_DIR "${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
-file(GLOB LIBFBJNI_INCLUDE_DIR "${BUILD_DIR}/fbjni-*-headers.jar/")
+
 
 # Add headers
 include_directories(
@@ -35,9 +31,10 @@ include_directories(
   "${NODE_MODULES_DIR}/react-native/React"
   "${NODE_MODULES_DIR}/react-native/React/Base"
   "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
-  "${NODE_MODULES_DIR}/react-native/ReactCommon/callinvoker"
-  "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni"
-  "${NODE_MODULES_DIR}/hermes-engine/android/include/"
+
+  # TODO: find a way to include headers only,
+  # TODO: this includes everything,
+  # TODO: even headers in cpp/cryptopp
   ${RN_CRYPTOPP_HEADERS}
 )
 
@@ -55,8 +52,6 @@ if (EXISTS "${LIBRN_DIR}/libjsi.so")
           ${PACKAGE_NAME}
           SHARED
           ${RN_CRYPTOPP_FILES}
-          ${RN_CRYPTOPP_HPP_FILES}
-          ${RN_CRYPTOPP_HO_FILES}
           ./cpp-adapter.cpp
   )
 else()
@@ -65,30 +60,18 @@ else()
           ${PACKAGE_NAME}
           SHARED
           ${RN_CRYPTOPP_FILES}
-          ${RN_CRYPTOPP_HPP_FILES}
-          ${RN_CRYPTOPP_HO_FILES}
           ${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp
           ./cpp-adapter.cpp
   )
 endif()
 
-
-target_include_directories(
-        ${PACKAGE_NAME}
-        PRIVATE
-        # --- fbjni ---
-        "${LIBFBJNI_INCLUDE_DIR}"
-        # --- React Native ---
-        "${NODE_MODULES_DIR}/react-native/React"
-        "${NODE_MODULES_DIR}/react-native/React/Base"
-        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/jni"
-        "${NODE_MODULES_DIR}/react-native/ReactAndroid/src/main/java/com/facebook/react/turbomodule/core/jni"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/callinvoker"
-        "${NODE_MODULES_DIR}/react-native/ReactCommon/jsi"
-        "${NODE_MODULES_DIR}/hermes-engine/android/include/"
-
-)
+# Find JNI
+ find_library(
+         REACT_NATIVE_JNI_LIB
+         reactnativejni
+         PATHS ${LIBRN_DIR}
+         NO_CMAKE_FIND_ROOT_PATH
+ )
 
 # Find LOG_LIB
 find_library(
@@ -111,9 +94,8 @@ set_target_properties(
 target_link_libraries(
   ${PACKAGE_NAME}
   cryptopp
-  ReactAndroid::jsi
+  ${REACT_NATIVE_JNI_LIB}
   ${JSI_LIB}
   ${LOG_LIB}
-  fbjni::fbjni
   android
 )
