@@ -48,35 +48,15 @@ make clean
 
 # Compile for all architectures
 build_cryptopp_android ${ANDROID_API} armeabi-v7a
-echo ""
-echo "Sleeping 5s ..."
-echo ""
-echo ""
-sleep 5
 make clean
 
 build_cryptopp_android ${ANDROID_API} arm64-v8a
-echo ""
-echo "Sleeping 5s ..."
-echo ""
-echo ""
-sleep 5
 make clean
 
 build_cryptopp_android ${ANDROID_API} x86
-echo ""
-echo "Sleeping 5s ..."
-echo ""
-echo ""
-sleep 5
 make clean
 
 build_cryptopp_android ${ANDROID_API} x86_64
-echo ""
-echo "Sleeping 5s ..."
-echo ""
-echo ""
-sleep 5
 make clean
 
 rm -rf "$TEMP_AND"
