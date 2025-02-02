@@ -4,13 +4,10 @@
 
 std::shared_ptr<react::CallInvoker> invoker;
 
-void execCppFunction(jsi::Runtime &rt,
-                      CppArgs *args,
-                      std::string &fnName,
-                      bool *boolTarget,
-                      std::string *stringTarget,
-                      QuickDataType *targetType,
-                      StringEncoding *targetEncoding) {
+void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName,
+                     bool *boolTarget, std::string *stringTarget,
+                     QuickDataType *targetType,
+                     StringEncoding *targetEncoding) {
   /*
   Hashes
   */
@@ -118,152 +115,169 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
   jsi::Object module = jsi::Object(jsiRuntime);
 
   // Host objects
-  module.setProperty(jsiRuntime, "createHash",
-                     jsi::Function::createFromHostFunction(
-                         jsiRuntime,
-                         jsi::PropNameID::forAscii(jsiRuntime, "createHash"), 1,
-                         rncryptopp::HostObjects::createHashHostObject)
-                    );
+  module.setProperty(
+    jsiRuntime,
+    "createHash",
+    jsi::Function::createFromHostFunction(
+      jsiRuntime,
+      jsi::PropNameID::forAscii(jsiRuntime, "createHash"), 1,
+      rncryptopp::HostObjects::createHashHostObject
+    )
+  );
 
   // Individual hashes
   module.setProperty(
-      jsiRuntime, "exec",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_sync"), 5,
-          [](jsi::Runtime &rt, const jsi::Value &thisValue,
-             const jsi::Value *functionArgs, size_t count) -> jsi::Value {
-            // Parse arguments from JS function call
-            CppArgs args;
-            parseJSIArgs(rt, functionArgs, count, &args);
-            if (args[0].dataType != STRING)
-              throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
-            std::string fnName = args[0].stringValue;
+    jsiRuntime, "exec",
+    jsi::Function::createFromHostFunction(
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_sync"), 5,
+      [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+        // Parse arguments from JS function call
+        CppArgs args;
+        parseJSIArgs(rt, functionArgs, count, &args);
+        if (args[0].dataType != STRING)
+          throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
+        std::string fnName = args[0].stringValue;
 
-            // Create result values returned to JS
-            StringEncoding resultEncoding = ENCODING_UTF8;
-            QuickDataType resultType = STRING;
-            std::string stringResult;
-            bool booleanResult;
+        // Create result values returned to JS
+        StringEncoding resultEncoding = ENCODING_UTF8;
+        QuickDataType resultType = STRING;
+        std::string stringResult;
+        bool booleanResult;
 
-            // RSA key pair generation is the only function returning an Object
-            if (fnName == "rsa_generateKeyPair") {
-              auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
-              jsi::Object params = jsi::Object(rt);
-              params.setProperty(rt, "n", keyPair.n);
-              params.setProperty(rt, "p", keyPair.p);
-              params.setProperty(rt, "q", keyPair.q);
-              params.setProperty(rt, "d", keyPair.d);
-              params.setProperty(rt, "e", keyPair.e);
+        // RSA key pair generation is the only function returning an Object
+        if (fnName == "rsa_generateKeyPair") {
+          auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
+          jsi::Object params = jsi::Object(rt);
+          params.setProperty(rt, "n", keyPair.n);
+          params.setProperty(rt, "p", keyPair.p);
+          params.setProperty(rt, "q", keyPair.q);
+          params.setProperty(rt, "d", keyPair.d);
+          params.setProperty(rt, "e", keyPair.e);
 
-              jsi::Object result = jsi::Object(rt);
-              result.setProperty(rt, "public", keyPair.public_key);
-              result.setProperty(rt, "private", keyPair.private_key);
-              result.setProperty(rt, "params", params);
-              return result;
-            }
+          jsi::Object result = jsi::Object(rt);
+          result.setProperty(rt, "public", keyPair.public_key);
+          result.setProperty(rt, "private", keyPair.private_key);
+          result.setProperty(rt, "params", params);
+          return result;
+        }
 
-            // All other functionality executed here:
-            execCppFunction(rt, &args, fnName, &booleanResult, &stringResult, &resultType, &resultEncoding);
+        // All other functionality executed here:
+        execCppFunction(rt, &args, fnName, &booleanResult, &stringResult, &resultType, &resultEncoding);
 
-            if (resultType == jsiHelper::BOOLEAN) return jsi::Value(booleanResult);
+        if (resultType == jsiHelper::BOOLEAN) return jsi::Value(booleanResult);
 
-            return returnStringOrArrayBuffer(rt, stringResult, resultType, resultEncoding);
-          }));
+        return returnStringOrArrayBuffer(rt, stringResult, resultType, resultEncoding);
+      }
+    )
+  );
 
   /*************************************************************************************************
   Async
   *************************************************************************************************/
 
   module.setProperty(
-      jsiRuntime, "exec_async",
-      jsi::Function::createFromHostFunction(
-          jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
-          [pool](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
-            CppArgs args;
-            parseJSIArgs(rt, functionArgs, count, &args);
-            auto sharedArgs = std::make_shared<CppArgs>(args);
-            auto argCount = std::make_shared<size_t>(count);
-            auto promiseContructor = rt.global().getPropertyAsFunction(rt, "Promise");
-            auto promise = promiseContructor.callAsConstructor(
-                rt,
-                jsi::Function::createFromHostFunction(
-                    rt, jsi::PropNameID::forAscii(rt, "Promise"), 2,
-                    [pool, sharedArgs,
-                     argCount](jsi::Runtime &rt, const jsi::Value &thisValue,
-                               const jsi::Value *promiseArgs,
-                               size_t promiseCount) -> jsi::Value {
-                      auto resolve = std::make_shared<jsi::Value>(rt, promiseArgs[0]);
-                      auto reject = std::make_shared<jsi::Value>(rt, promiseArgs[1]);
+  jsiRuntime, "exec_async",
+  jsi::Function::createFromHostFunction(
+    jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
+    [pool](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
+      CppArgs args;
+      parseJSIArgs(rt, functionArgs, count, &args);
+      auto sharedArgs = std::make_shared<CppArgs>(args);
+      auto argCount = std::make_shared<size_t>(count);
+      auto promiseContructor = rt.global().getPropertyAsFunction(rt, "Promise");
+      auto promise = promiseContructor.callAsConstructor(
+        rt,
+        jsi::Function::createFromHostFunction(
+          rt, jsi::PropNameID::forAscii(rt, "Promise"), 2,
+          [pool, sharedArgs, argCount](
+            jsi::Runtime &rt, const jsi::Value &thisValue,
+            const jsi::Value *promiseArgs,
+            size_t promiseCount
+          ) -> jsi::Value {
+            auto resolve = std::make_shared<jsi::Value>(rt, promiseArgs[0]);
+            auto reject = std::make_shared<jsi::Value>(rt, promiseArgs[1]);
+            auto task = [&rt, resolve, reject, sharedArgs, argCount]() {
+              try {
+                auto args = *sharedArgs.get();
+                if (args[0].dataType != STRING)
+                  throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
+                std::string fnName = args[0].stringValue;
 
-                      auto task = [&rt, resolve, reject, sharedArgs, argCount]() {
-                        try {
-                          auto args = *sharedArgs.get();
-                          if (args[0].dataType != STRING)
-                            throw facebook::jsi::JSError(rt, "RNCryptopp: invalid function name");
-                          std::string fnName = args[0].stringValue;
+                // Create result values returned to JS
+                StringEncoding resultEncoding = ENCODING_UTF8;
+                QuickDataType resultType = STRING;
+                std::string stringResult;
+                bool booleanResult;
 
-                          // Create result values returned to JS
-                          StringEncoding resultEncoding = ENCODING_UTF8;
-                          QuickDataType resultType = STRING;
-                          std::string stringResult;
-                          bool booleanResult;
+                // RSA key pair generation is the only function
+                // returning an Object
+                if (fnName == "rsa_generateKeyPair") {
+                  auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
+                  auto sharedKeyPair = std::make_shared<RSAKeyPair>(keyPair);
 
-                          // RSA key pair generation is the only function
-                          // returning an Object
-                          if (fnName == "rsa_generateKeyPair") {
-                            auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
-                            auto sharedKeyPair = std::make_shared<RSAKeyPair>(keyPair);
+                  invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
+                    jsi::Object params = jsi::Object(rt);
+                    params.setProperty(rt, "n", (*sharedKeyPair.get()).n);
+                    params.setProperty(rt, "p", (*sharedKeyPair.get()).p);
+                    params.setProperty(rt, "q", (*sharedKeyPair.get()).q);
+                    params.setProperty(rt, "d", (*sharedKeyPair.get()).d);
+                    params.setProperty(rt, "e", (*sharedKeyPair.get()).e);
 
-                            invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
-                              jsi::Object params = jsi::Object(rt);
-                              params.setProperty(rt, "n", (*sharedKeyPair.get()).n);
-                              params.setProperty(rt, "p", (*sharedKeyPair.get()).p);
-                              params.setProperty(rt, "q", (*sharedKeyPair.get()).q);
-                              params.setProperty(rt, "d", (*sharedKeyPair.get()).d);
-                              params.setProperty(rt, "e", (*sharedKeyPair.get()).e);
+                    jsi::Object result = jsi::Object(rt);
+                    result.setProperty(rt, "public", (*sharedKeyPair.get()).public_key);
+                    result.setProperty(rt, "private", (*sharedKeyPair.get()).private_key);
+                    result.setProperty(rt, "params", params);
 
-                              jsi::Object result = jsi::Object(rt);
-                              result.setProperty(rt, "public", (*sharedKeyPair.get()).public_key);
-                              result.setProperty(rt, "private", (*sharedKeyPair.get()).private_key);
-                              result.setProperty(rt, "params", params);
+                    resolve->asObject(rt).asFunction(rt).call(rt, result);
+                  });
+                  return;
+                }
 
-                              resolve->asObject(rt).asFunction(rt).call(rt, result);
-                            });
-                            return;
-                          }
+                // All other functionality executed here:
+                execCppFunction(
+                  rt, &args, fnName, &booleanResult,
+                  &stringResult, &resultType,
+                  &resultEncoding
+                );
 
-                          // All other functionality executed here:
-                          execCppFunction(rt, &args, fnName, &booleanResult, &stringResult, &resultType, &resultEncoding);
+                auto sharedResultEncoding = std::make_shared<StringEncoding>(resultEncoding);
+                auto sharedResultType = std::make_shared<QuickDataType>(resultType);
+                auto sharedStringResult = std::make_shared<std::string>(stringResult);
+                auto sharedBooleanResult = std::make_shared<bool>(booleanResult);
 
-                          auto sharedResultEncoding = std::make_shared<StringEncoding>(resultEncoding);
-                          auto sharedResultType = std::make_shared<QuickDataType>(resultType);
-                          auto sharedStringResult = std::make_shared<std::string>(stringResult);
-                          auto sharedBooleanResult = std::make_shared<bool>(booleanResult);
+                invoker->invokeAsync([
+                  &rt, resolve,
+                  sharedResultEncoding,
+                  sharedResultType,
+                  sharedStringResult,
+                  sharedBooleanResult
+                ] {
+                  if (*sharedResultType.get() == jsiHelper::BOOLEAN) {
+                    resolve->asObject(rt).asFunction(rt).call(rt, jsi::Value(*sharedBooleanResult.get()));
+                  }
 
-                          invoker->invokeAsync([&rt,
-                                                resolve,
-                                                sharedResultEncoding,
-                                                sharedResultType,
-                                                sharedStringResult,
-                                                sharedBooleanResult] {
-                            if (*sharedResultType.get() == jsiHelper::BOOLEAN) {
-                              resolve->asObject(rt).asFunction(rt).call(rt, jsi::Value(*sharedBooleanResult.get()));
-                            }
-
-                            resolve->asObject(rt).asFunction(rt).call(
-                                rt, returnStringOrArrayBuffer(rt, *sharedStringResult.get(), *sharedResultType.get(), *sharedResultEncoding.get()));
-                          });
-                        } catch (std::exception &exc) {
-                          invoker->invokeAsync([&rt, reject, &exc] {
-                            reject->asObject(rt).asFunction(rt).call(rt, jsi::String::createFromUtf8(rt, exc.what()));
-                          });
-                        }
-                      };
-                      pool->queueWork(task);
-                      return {};
-                    }));
-            return promise;
-          }));
+                  resolve->asObject(rt).asFunction(rt).call(
+                    rt,
+                    returnStringOrArrayBuffer(
+                      rt, *sharedStringResult.get(),
+                      *sharedResultType.get(),
+                      *sharedResultEncoding.get()
+                    )
+                  );
+                });
+              } catch (std::exception &exc) {
+                invoker->invokeAsync([&rt, reject, &exc] {
+                  reject->asObject(rt).asFunction(rt).call(rt, jsi::String::createFromUtf8(rt, exc.what()));
+                });
+              }
+            };
+            pool->queueWork(task);
+            return {};
+          }
+        )
+      );
+      return promise;
+    }));
 
   jsiRuntime.global().setProperty(jsiRuntime, "cryptoppModule", std::move(module));
 }

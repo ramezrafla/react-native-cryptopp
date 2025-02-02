@@ -15,7 +15,7 @@ using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 using namespace rncryptopp::jsiHelper;
 
-namespace rncryptopp::insecure {
+  namespace rncryptopp::insecure {
   void md2(jsi::Runtime &rt, CppArgs *args, std::string &target);
   void md4(jsi::Runtime &rt, CppArgs *args, std::string &target);
   void md5(jsi::Runtime &rt, CppArgs *args, std::string &target);

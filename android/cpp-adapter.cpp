@@ -9,15 +9,16 @@ struct CryptoppBridge : jni::JavaClass<CryptoppBridge>
   static constexpr auto kJavaDescriptor = "Lcom/reactnativecryptopp/CryptoppBridge;";
 
   static void registerNatives()
-  {
-    javaClassStatic()->registerNatives({// initialization for JSI
-                                        makeNativeMethod("installNativeJsi", CryptoppBridge::installNativeJsi)});
+    {// initialization for JSI
+    javaClassStatic()->registerNatives({makeNativeMethod("installNativeJsi", CryptoppBridge::installNativeJsi)});
   }
 
 private:
-  static void installNativeJsi(jni::alias_ref<jni::JObject> thiz,
-                               jlong jsiRuntimePtr,
-                               jni::alias_ref<react::CallInvokerHolder::javaobject> jsCallInvokerHolder)
+  static void installNativeJsi(
+    jni::alias_ref<jni::JObject> thiz,
+    jlong jsiRuntimePtr,
+    jni::alias_ref<react::CallInvokerHolder::javaobject> jsCallInvokerHolder
+  )
   {
     auto jsiRuntime = reinterpret_cast<jsi::Runtime *>(jsiRuntimePtr);
     auto jsCallInvoker = jsCallInvokerHolder->cthis()->getCallInvoker();
@@ -28,6 +29,5 @@ private:
 
 JNIEXPORT jint JNI_OnLoad(JavaVM *vm, void *)
 {
-  return jni::initialize(vm, []
-                         { CryptoppBridge::registerNatives(); });
+  return jni::initialize(vm, [] { CryptoppBridge::registerNatives(); });
 }

@@ -27,6 +27,7 @@ function build_cryptopp_android
     make -f GNUmakefile-cross static
     make install -f GNUmakefile-cross PREFIX="$TEMP_AND"
     mv "$TEMP_AND/lib/libcryptopp.a" "$CWD/cpp/android/libcryptopp_$2.a"
+    # copying headers over -- used by CMakeLists.txt
     mv -f "$TEMP_AND/include/cryptopp" "$CWD/cpp"
 }
 

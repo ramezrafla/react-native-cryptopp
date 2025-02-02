@@ -18,9 +18,12 @@ using namespace CryptoPP;
 using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::keyderivation {
-  void hkdf(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-  void pbkdf12(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-  void pkcs5_pbkdf1(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-  void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-  void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+void hkdf(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+void pbkdf12(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+void pkcs5_pbkdf1(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                  QuickDataType *targetType, StringEncoding *targetEncoding);
+void pkcs5_pbkdf2(jsi::Runtime &rt, CppArgs *args, std::string *target,
+                  QuickDataType *targetType, StringEncoding *targetEncoding);
+void scrypt(jsi::Runtime &rt, CppArgs *args, std::string *target,
+            QuickDataType *targetType, StringEncoding *targetEncoding);
 } // namespace rncryptopp::keyderivation
