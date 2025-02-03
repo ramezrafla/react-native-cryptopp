@@ -5,9 +5,7 @@ ThreadPool::ThreadPool() : done(false) {
   // function can't figure out this information, it returns 0. 0 is not good,
   // so we create at least 1
   auto numberOfThreads = std::thread::hardware_concurrency();
-  if (numberOfThreads == 0) {
-    numberOfThreads = 1;
-  }
+  if (numberOfThreads == 0) numberOfThreads = 1;
 
   for (unsigned i = 0; i < numberOfThreads; ++i) {
     // The threads will execute the private member `doWork`. Note that we need

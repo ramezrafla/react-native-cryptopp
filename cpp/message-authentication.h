@@ -48,17 +48,13 @@ using namespace CryptoPP;
 using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp {
-namespace hmac {
-void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
-              QuickDataType *targetType, StringEncoding *targetEncoding);
-void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
-            QuickDataType *targetType);
-} // namespace hmac
+  namespace hmac {
+    void generate(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+    void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType);
+  } // namespace hmac
 
-namespace cmac {
-void generate(jsi::Runtime &rt, CppArgs *args, std::string *target,
-              QuickDataType *targetType, StringEncoding *targetEncoding);
-void verify(jsi::Runtime &rt, CppArgs *args, bool *target,
-            QuickDataType *targetType);
-} // namespace cmac
+  namespace cmac {
+    void generate(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+    void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType);
+  } // namespace cmac
 } // namespace rncryptopp

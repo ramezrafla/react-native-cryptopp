@@ -187,26 +187,17 @@ namespace rncryptopp::rsa {
     CryptoPP::RSA::PrivateKey privateKey;
     PEM_Load(PKeyStringSource, privateKey);
 
-    if (signScheme == "PKCS1v15_SHA1")
-      exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, target);
-    else if (signScheme == "PKCS1v15_SHA256")
-      exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, target);
+    if (signScheme == "PKCS1v15_SHA1") exec_sign<RSASS<PKCS1v15, SHA1>>(&data, &privateKey, target);
+    else if (signScheme == "PKCS1v15_SHA256") exec_sign<RSASS<PKCS1v15, SHA256>>(&data, &privateKey, target);
     // PSSR
-    else if (signScheme == "PSSR_SHA1")
-      exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, target, true);
-    else if (signScheme == "PSSR_SHA256")
-      exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, target, true);
-    else if (signScheme == "PSSR_Whirlpool")
-      exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, target, true);
+    else if (signScheme == "PSSR_SHA1") exec_sign<RSASS<PSSR, SHA1>>(&data, &privateKey, target, true);
+    else if (signScheme == "PSSR_SHA256") exec_sign<RSASS<PSSR, SHA256>>(&data, &privateKey, target, true);
+    else if (signScheme == "PSSR_Whirlpool") exec_sign<RSASS<PSSR, Whirlpool>>(&data, &privateKey, target, true);
     // PSS
-    else if (signScheme == "PSS_SHA1")
-      exec_sign<RSASS<PSS, SHA1>>(&data, &privateKey, target);
-    else if (signScheme == "PSS_SHA256")
-      exec_sign<RSASS<PSS, SHA256>>(&data, &privateKey, target);
-    else if (signScheme == "PSS_Whirlpool")
-      exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, target);
-    else
-      throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign invalid scheme");
+    else if (signScheme == "PSS_SHA1") exec_sign<RSASS<PSS, SHA1>>(&data, &privateKey, target);
+    else if (signScheme == "PSS_SHA256") exec_sign<RSASS<PSS, SHA256>>(&data, &privateKey, target);
+    else if (signScheme == "PSS_Whirlpool") exec_sign<RSASS<PSS, Whirlpool>>(&data, &privateKey, target);
+    else throw facebook::jsi::JSError(rt, "RNCryptopp: RSA sign invalid scheme");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = ENCODING_BASE64;

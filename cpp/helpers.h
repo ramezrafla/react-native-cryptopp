@@ -85,64 +85,35 @@ namespace rncryptopp {
   template <template <typename> class F> struct invokeWithHash {
     template <typename... R>
     bool operator()(std::string &hash_type, R... functionParams) const {
-      if (hash_type == "BLAKE2b")
-        F<BLAKE2b>()(functionParams...);
-      else if (hash_type == "BLAKE2s")
-        F<BLAKE2s>()(functionParams...);
-      else if (hash_type == "Keccak224")
-        F<Keccak_224>()(functionParams...);
-      else if (hash_type == "Keccak256")
-        F<Keccak_256>()(functionParams...);
-      else if (hash_type == "Keccak384")
-        F<Keccak_384>()(functionParams...);
-      else if (hash_type == "Keccak512")
-        F<Keccak_512>()(functionParams...);
-      else if (hash_type == "LSH224")
-        F<LSH224>()(functionParams...);
-      else if (hash_type == "LSH256")
-        F<LSH256>()(functionParams...);
-      else if (hash_type == "LSH384")
-        F<LSH384>()(functionParams...);
-      else if (hash_type == "LSH512")
-        F<LSH512>()(functionParams...);
-      else if (hash_type == "SHA1")
-        F<SHA1>()(functionParams...);
-      else if (hash_type == "SHA224")
-        F<SHA224>()(functionParams...);
-      else if (hash_type == "SHA256")
-        F<SHA256>()(functionParams...);
-      else if (hash_type == "SHA384")
-        F<SHA384>()(functionParams...);
-      else if (hash_type == "SHA512")
-        F<SHA512>()(functionParams...);
-      else if (hash_type == "SHA3_224")
-        F<SHA3_224>()(functionParams...);
-      else if (hash_type == "SHA3_256")
-        F<SHA3_256>()(functionParams...);
-      else if (hash_type == "SHA3_384")
-        F<SHA3_384>()(functionParams...);
-      else if (hash_type == "SHA3_512")
-        F<SHA3_512>()(functionParams...);
-      else if (hash_type == "SHAKE128")
-        F<SHAKE128>()(functionParams...);
-      else if (hash_type == "SHAKE256")
-        F<SHAKE256>()(functionParams...);
-      else if (hash_type == "SM3")
-        F<SM3>()(functionParams...);
-      else if (hash_type == "Tiger")
-        F<Tiger>()(functionParams...);
-      else if (hash_type == "RIPEMD128")
-        F<RIPEMD128>()(functionParams...);
-      else if (hash_type == "RIPEMD160")
-        F<RIPEMD160>()(functionParams...);
-      else if (hash_type == "RIPEMD256")
-        F<RIPEMD256>()(functionParams...);
-      else if (hash_type == "RIPEMD320")
-        F<RIPEMD320>()(functionParams...);
-      else if (hash_type == "WHIRLPOOL")
-        F<Whirlpool>()(functionParams...);
-      else
-        return false;
+      if (hash_type == "BLAKE2b") F<BLAKE2b>()(functionParams...);
+      else if (hash_type == "BLAKE2s") F<BLAKE2s>()(functionParams...);
+      else if (hash_type == "Keccak224") F<Keccak_224>()(functionParams...);
+      else if (hash_type == "Keccak256") F<Keccak_256>()(functionParams...);
+      else if (hash_type == "Keccak384") F<Keccak_384>()(functionParams...);
+      else if (hash_type == "Keccak512") F<Keccak_512>()(functionParams...);
+      else if (hash_type == "LSH224") F<LSH224>()(functionParams...);
+      else if (hash_type == "LSH256") F<LSH256>()(functionParams...);
+      else if (hash_type == "LSH384") F<LSH384>()(functionParams...);
+      else if (hash_type == "LSH512") F<LSH512>()(functionParams...);
+      else if (hash_type == "SHA1") F<SHA1>()(functionParams...);
+      else if (hash_type == "SHA224") F<SHA224>()(functionParams...);
+      else if (hash_type == "SHA256") F<SHA256>()(functionParams...);
+      else if (hash_type == "SHA384") F<SHA384>()(functionParams...);
+      else if (hash_type == "SHA512") F<SHA512>()(functionParams...);
+      else if (hash_type == "SHA3_224") F<SHA3_224>()(functionParams...);
+      else if (hash_type == "SHA3_256") F<SHA3_256>()(functionParams...);
+      else if (hash_type == "SHA3_384") F<SHA3_384>()(functionParams...);
+      else if (hash_type == "SHA3_512") F<SHA3_512>()(functionParams...);
+      else if (hash_type == "SHAKE128") F<SHAKE128>()(functionParams...);
+      else if (hash_type == "SHAKE256") F<SHAKE256>()(functionParams...);
+      else if (hash_type == "SM3") F<SM3>()(functionParams...);
+      else if (hash_type == "Tiger") F<Tiger>()(functionParams...);
+      else if (hash_type == "RIPEMD128") F<RIPEMD128>()(functionParams...);
+      else if (hash_type == "RIPEMD160") F<RIPEMD160>()(functionParams...);
+      else if (hash_type == "RIPEMD256") F<RIPEMD256>()(functionParams...);
+      else if (hash_type == "RIPEMD320") F<RIPEMD320>()(functionParams...);
+      else if (hash_type == "WHIRLPOOL") F<Whirlpool>()(functionParams...);
+      else return false;
       return true;
     }
   };
@@ -151,80 +122,43 @@ namespace rncryptopp {
     template <typename... R>
     bool operator()(std::string &cipher, bool allowAES, bool allowOther, R... rest) const {
       // AES and candidates block ciphers
-      if (cipher == "AES" && allowAES)
-        F<AES>()(rest...);
-      else if (cipher == "RC6" && allowAES)
-        F<RC6>()(rest...);
-      else if (cipher == "MARS" && allowAES)
-        F<MARS>()(rest...);
-      else if (cipher == "Twofish" && allowAES)
-        F<Twofish>()(rest...);
-      else if (cipher == "Serpent" && allowAES)
-        F<Serpent>()(rest...);
-      else if (cipher == "CAST256" && allowAES)
-        F<CAST256>()(rest...);
-
+      if (cipher == "AES" && allowAES) F<AES>()(rest...);
+      else if (cipher == "RC6" && allowAES) F<RC6>()(rest...);
+      else if (cipher == "MARS" && allowAES) F<MARS>()(rest...);
+      else if (cipher == "Twofish" && allowAES) F<Twofish>()(rest...);
+      else if (cipher == "Serpent" && allowAES) F<Serpent>()(rest...);
+      else if (cipher == "CAST256" && allowAES) F<CAST256>()(rest...);
       // Other block ciphers
-      else if (cipher == "ARIA" && allowOther)
-        F<ARIA>()(rest...);
-      else if (cipher == "Blowfish" && allowOther)
-        F<Blowfish>()(rest...);
-      else if (cipher == "Camellia" && allowOther)
-        F<Camellia>()(rest...);
-      else if (cipher == "CHAM64" && allowOther)
-        F<CHAM64>()(rest...);
-      else if (cipher == "CHAM128" && allowOther)
-        F<CHAM128>()(rest...);
-      else if (cipher == "HIGHT" && allowOther)
-        F<HIGHT>()(rest...);
-      else if (cipher == "IDEA" && allowOther)
-        F<IDEA>()(rest...);
-      else if (cipher == "Kalyna128" && allowOther)
-        F<Kalyna128>()(rest...);
-      else if (cipher == "Kalyna256" && allowOther)
-        F<Kalyna256>()(rest...);
-      else if (cipher == "Kalyna512" && allowOther)
-        F<Kalyna512>()(rest...);
-      else if (cipher == "LEA" && allowOther)
-        F<LEA>()(rest...);
-      else if (cipher == "SEED" && allowOther)
-        F<SEED>()(rest...);
-      else if (cipher == "RC5" && allowOther)
-        F<RC5>()(rest...);
-      else if (cipher == "SHACAL2" && allowOther)
-        F<SHACAL2>()(rest...);
-      else if (cipher == "SIMECK32" && allowOther)
-        F<SIMECK32>()(rest...);
-      else if (cipher == "SIMECK64" && allowOther)
-        F<SIMECK64>()(rest...);
-      else if (cipher == "SIMON64" && allowOther)
-        F<SIMON64>()(rest...);
-      else if (cipher == "SIMON128" && allowOther)
-        F<SIMON128>()(rest...);
-      else if (cipher == "SKIPJACK" && allowOther)
-        F<SKIPJACK>()(rest...);
-      else if (cipher == "SPECK64" && allowOther)
-        F<SPECK64>()(rest...);
-      else if (cipher == "SPECK128" && allowOther)
-        F<SPECK128>()(rest...);
-      else if (cipher == "SM4" && allowOther)
-        F<SM4>()(rest...);
-      else if (cipher == "Threefish256" && allowOther)
-        F<Threefish256>()(rest...);
-      else if (cipher == "Threefish512" && allowOther)
-        F<Threefish512>()(rest...);
-      else if (cipher == "Threefish1024" && allowOther)
-        F<Threefish1024>()(rest...);
-      else if (cipher == "DES_EDE2" && allowOther)
-        F<DES_EDE2>()(rest...);
-      else if (cipher == "DES_EDE3" && allowOther)
-        F<DES_EDE3>()(rest...);
-      else if (cipher == "TEA" && allowOther)
-        F<TEA>()(rest...);
-      else if (cipher == "XTEA" && allowOther)
-        F<XTEA>()(rest...);
-      else
-        return false;
+      else if (cipher == "ARIA" && allowOther) F<ARIA>()(rest...);
+      else if (cipher == "Blowfish" && allowOther) F<Blowfish>()(rest...);
+      else if (cipher == "Camellia" && allowOther) F<Camellia>()(rest...);
+      else if (cipher == "CHAM64" && allowOther) F<CHAM64>()(rest...);
+      else if (cipher == "CHAM128" && allowOther) F<CHAM128>()(rest...);
+      else if (cipher == "HIGHT" && allowOther) F<HIGHT>()(rest...);
+      else if (cipher == "IDEA" && allowOther) F<IDEA>()(rest...);
+      else if (cipher == "Kalyna128" && allowOther) F<Kalyna128>()(rest...);
+      else if (cipher == "Kalyna256" && allowOther) F<Kalyna256>()(rest...);
+      else if (cipher == "Kalyna512" && allowOther) F<Kalyna512>()(rest...);
+      else if (cipher == "LEA" && allowOther) F<LEA>()(rest...);
+      else if (cipher == "SEED" && allowOther) F<SEED>()(rest...);
+      else if (cipher == "RC5" && allowOther) F<RC5>()(rest...);
+      else if (cipher == "SHACAL2" && allowOther) F<SHACAL2>()(rest...);
+      else if (cipher == "SIMECK32" && allowOther) F<SIMECK32>()(rest...);
+      else if (cipher == "SIMECK64" && allowOther) F<SIMECK64>()(rest...);
+      else if (cipher == "SIMON64" && allowOther) F<SIMON64>()(rest...);
+      else if (cipher == "SIMON128" && allowOther) F<SIMON128>()(rest...);
+      else if (cipher == "SKIPJACK" && allowOther) F<SKIPJACK>()(rest...);
+      else if (cipher == "SPECK64" && allowOther) F<SPECK64>()(rest...);
+      else if (cipher == "SPECK128" && allowOther) F<SPECK128>()(rest...);
+      else if (cipher == "SM4" && allowOther) F<SM4>()(rest...);
+      else if (cipher == "Threefish256" && allowOther) F<Threefish256>()(rest...);
+      else if (cipher == "Threefish512" && allowOther) F<Threefish512>()(rest...);
+      else if (cipher == "Threefish1024" && allowOther) F<Threefish1024>()(rest...);
+      else if (cipher == "DES_EDE2" && allowOther) F<DES_EDE2>()(rest...);
+      else if (cipher == "DES_EDE3" && allowOther) F<DES_EDE3>()(rest...);
+      else if (cipher == "TEA" && allowOther) F<TEA>()(rest...);
+      else if (cipher == "XTEA" && allowOther) F<XTEA>()(rest...);
+      else return false;
       return true;
     }
   };
