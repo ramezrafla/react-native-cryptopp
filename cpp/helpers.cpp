@@ -4,17 +4,17 @@ namespace rncryptopp {
 
   void encodeString(std::string *in, std::string *out, StringEncoding encoding) {
     switch (encoding) {
-    case ENCODING_HEX:
-      StringSource(*in, true, new HexEncoder(new StringSink(*out)));
-      break;
-    case ENCODING_BASE64:
-      StringSource(*in, true, new Base64Encoder(new StringSink(*out), false));
-      break;
-    case ENCODING_BASE64URL:
-      StringSource(*in, true, new Base64URLEncoder(new StringSink(*out)));
-      break;
-    default:
-      *out = *in;
+      case ENCODING_HEX:
+        StringSource(*in, true, new HexEncoder(new StringSink(*out)));
+        break;
+      case ENCODING_BASE64:
+        StringSource(*in, true, new Base64Encoder(new StringSink(*out), false));
+        break;
+      case ENCODING_BASE64URL:
+        StringSource(*in, true, new Base64URLEncoder(new StringSink(*out)));
+        break;
+      default:
+        *out = *in;
     }
   }
 
@@ -24,17 +24,17 @@ namespace rncryptopp {
       return;
     }
     switch (encoding) {
-    case ENCODING_HEX:
-      StringSource(jsiValue.stringValue, true, new HexDecoder(new StringSink(*out)));
-      break;
-    case ENCODING_BASE64:
-      StringSource(jsiValue.stringValue, true, new Base64Decoder(new StringSink(*out)));
-      break;
-    case ENCODING_BASE64URL:
-      StringSource(jsiValue.stringValue, true, new Base64URLDecoder(new StringSink(*out)));
-      break;
-    default:
-      *out = jsiValue.stringValue;
+      case ENCODING_HEX:
+        StringSource(jsiValue.stringValue, true, new HexDecoder(new StringSink(*out)));
+        break;
+      case ENCODING_BASE64:
+        StringSource(jsiValue.stringValue, true, new Base64Decoder(new StringSink(*out)));
+        break;
+      case ENCODING_BASE64URL:
+        StringSource(jsiValue.stringValue, true, new Base64URLDecoder(new StringSink(*out)));
+        break;
+      default:
+        *out = jsiValue.stringValue;
     }
   }
 

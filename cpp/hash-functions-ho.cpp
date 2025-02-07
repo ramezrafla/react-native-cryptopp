@@ -19,7 +19,9 @@ namespace rncryptopp::HostObjects {
 
     if (propName == "update") {
       return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forAscii(runtime, funcName), 1,
+        runtime,
+        jsi::PropNameID::forAscii(runtime, funcName),
+        1,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
           CppArgs args;
           parseJSIArgs(rt, functionArgs, count, &args);
@@ -39,7 +41,9 @@ namespace rncryptopp::HostObjects {
 
     if (propName == "finalize") {
       return jsi::Function::createFromHostFunction(
-        runtime, jsi::PropNameID::forAscii(runtime, funcName), 0,
+        runtime,
+        jsi::PropNameID::forAscii(runtime, funcName),
+        0,
         [this](jsi::Runtime &rt, const jsi::Value &thisVal, const jsi::Value *args, size_t count) -> jsi::Value {
           std::string result;
           if (hashName == "SipHash_2_4_64") {

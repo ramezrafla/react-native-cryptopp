@@ -4,7 +4,9 @@
 
 using namespace facebook;
 namespace rncryptopp::jsiHelper {
-  QuickValue createNullQuickValue() { return QuickValue{.dataType = NULL_VALUE}; }
+  QuickValue createNullQuickValue() {
+    return QuickValue{.dataType = NULL_VALUE};
+  }
 
   QuickValue createBooleanQuickValue(bool value) {
     return QuickValue{.dataType = BOOLEAN, .booleanValue = value};

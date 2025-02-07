@@ -161,7 +161,8 @@ namespace rncryptopp::rsa {
     typename SCHEME::Signer signer(*privateKey);
 
     StringSource(
-      *data, true,
+      *data,
+      true,
       new SignerFilter(rng, signer, new StringSink(*result), putMessage)
     );
   }
@@ -270,7 +271,8 @@ namespace rncryptopp::rsa {
         (const byte *)signature.data(),
         signature.size()
       );
-    } else
+    }
+    else
       throw facebook::jsi::JSError(rt, "RNCryptopp: RSA verify invalid scheme");
 
     *target = result;
@@ -321,7 +323,8 @@ namespace rncryptopp::rsa {
           signature, true,
           new SignatureVerificationFilter(verifier, new StringSink(*target), THROW_EXCEPTION | PUT_MESSAGE)
         );
-      } else {
+      }
+      else {
         // Will not be caught by std::exception &e bellow
         throw facebook::jsi::JSError(rt, "RNCryptopp: RSA recover invalid scheme");
       }

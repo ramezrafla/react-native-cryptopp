@@ -23,7 +23,7 @@ namespace rncryptopp::aescandidates {
   enum ExecType {ENCRYPT,DECRYPT,};
 
   template <template <class> class T_Mode, class T_BlockCipher>
-    void exec(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
+  void exec(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
       typename T_Mode<T_BlockCipher>::Encryption e;
       try {
@@ -59,22 +59,14 @@ namespace rncryptopp::aescandidates {
 
   template <class T_BlockCipher, typename... R>
   bool getModeAndExec(std::string &mode, R... rest) {
-    if (mode == "ecb")
-      exec<ECB_Mode, T_BlockCipher>(rest...);
-    else if (mode == "cbc")
-      exec<CBC_Mode, T_BlockCipher>(rest...);
-    else if (mode == "cbc_cts")
-      exec<CBC_CTS_Mode, T_BlockCipher>(rest...);
-    else if (mode == "cfb")
-      exec<CFB_Mode, T_BlockCipher>(rest...);
-    else if (mode == "ofb")
-      exec<OFB_Mode, T_BlockCipher>(rest...);
-    else if (mode == "ctr")
-      exec<CTR_Mode, T_BlockCipher>(rest...);
-    else if (mode == "xts")
-      exec<XTS_Mode, T_BlockCipher>(rest...);
-    else
-      return false;
+    if (mode == "ecb") exec<ECB_Mode, T_BlockCipher>(rest...);
+    else if (mode == "cbc") exec<CBC_Mode, T_BlockCipher>(rest...);
+    else if (mode == "cbc_cts") exec<CBC_CTS_Mode, T_BlockCipher>(rest...);
+    else if (mode == "cfb") exec<CFB_Mode, T_BlockCipher>(rest...);
+    else if (mode == "ofb") exec<OFB_Mode, T_BlockCipher>(rest...);
+    else if (mode == "ctr") exec<CTR_Mode, T_BlockCipher>(rest...);
+    else if (mode == "xts") exec<XTS_Mode, T_BlockCipher>(rest...);
+    else return false;
     return true;
   }
 
