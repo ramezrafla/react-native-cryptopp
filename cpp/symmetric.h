@@ -22,7 +22,6 @@ namespace rncryptopp::symmetric {
   void execGCM(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
   void execCBC(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
   void execCTR(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
-  bool getModeAndExec(std::string &mode, R... rest);
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
   void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
 }

@@ -141,14 +141,6 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
     }
   }
 
-  bool getModeAndExec(std::string &mode, R... rest) {
-    if (mode == "gcm") execGCM(rest...);
-    else if (mode == "cbc") execCBC(rest...);
-    else if (mode == "ctr") execCTR(rest...);
-    else return false;
-    return true;
-  }
-
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt invalid number of arguments");
@@ -172,8 +164,10 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
     decodeJSIString(args->at(3), &iv, ENCODING_HEX);
 
     // Encrypt
-    if (!getModeAndExec(mode, &key, &iv, &data, target, ENCRYPT))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt mode is not a valid mode");
+    if (mode == "gcm") execGCM(&key, &iv, &data, target, ENCRYPT);
+    else if (mode == "cbc") execCBC(&key, &iv, &data, target, ENCRYPT);
+    else if (mode == "ctr") execCTR(&key, &iv, &data, target, ENCRYPT);
+    else throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
@@ -203,8 +197,10 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
     std::string mode = args->at(4).stringValue;
 
     // Decrypt
-    if (!getModeAndExec(mode, &key, &iv, &data, target, DECRYPT))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt mode is not a valid mode");
+    if (mode == "gcm") execGCM(&key, &iv, &data, target, DECRYPT);
+    else if (mode == "cbc") execCBC(&key, &iv, &data, target, DECRYPT);
+    else if (mode == "ctr") execCTR(&key, &iv, &data, target, DECRYPT);
+    else throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = ENCODING_UTF8;
