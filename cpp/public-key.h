@@ -9,6 +9,7 @@
 #include "cryptopp/pssr.h"
 #include "cryptopp/rsa.h"
 #include "cryptopp/whrlpool.h"
+#include "cryptopp/base64.h"
 
 #include "helpers.h"
 

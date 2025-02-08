@@ -3,6 +3,16 @@
 #define PUT_MESSAGE 2
 #define THROW_EXCEPTION 16
 
+std::string convertIntegerToBase64Url(CryptoPP::Integer v) {
+  std::string out;
+  size_t len = v.MinEncodedSize(CryptoPP::Integer::UNSIGNED);
+  char vchar[len];
+  v.Encode((byte *)&vchar, len);
+  StringSource((byte *)&vchar, len, true, new Base64URLEncoder(new StringSink(out)));
+  // std::cout << "n " << out << "\n";
+  return out;
+}
+
 namespace rncryptopp::rsa {
   RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
     if (args->size() != 3)
@@ -26,25 +36,11 @@ namespace rncryptopp::rsa {
     CryptoPP::RSA::PrivateKey privateKey(key_params);
     CryptoPP::RSA::PublicKey publicKey(key_params);
 
-    const Integer &n = key_params.GetModulus();
-    std::stringstream n_stream;
-    n_stream << n;
-
-    const Integer &p = key_params.GetPrime1();
-    std::stringstream p_stream;
-    p_stream << p;
-
-    const Integer &q = key_params.GetPrime2();
-    std::stringstream q_stream;
-    q_stream << q;
-
-    const Integer &d = key_params.GetPrivateExponent();
-    std::stringstream d_stream;
-    d_stream << d;
-
-    const Integer &e = key_params.GetPublicExponent();
-    std::stringstream e_stream;
-    e_stream << e;
+    const Integer n = key_params.GetModulus();
+    const Integer p = key_params.GetPrime1();
+    const Integer q = key_params.GetPrime2();
+    const Integer d = key_params.GetPrivateExponent();
+    const Integer e = key_params.GetPublicExponent();
 
     std::string pem_public;
     StringSink pem_public_sink(pem_public);
@@ -55,11 +51,11 @@ namespace rncryptopp::rsa {
     PEM_Save(pem_private_sink, privateKey);
 
     return RSAKeyPair{
-      .n = n_stream.str(),
-      .p = p_stream.str(),
-      .q = q_stream.str(),
-      .d = d_stream.str(),
-      .e = e_stream.str(),
+      .n = convertIntegerToBase64Url(n),
+      .p = convertIntegerToBase64Url(q),
+      .q = convertIntegerToBase64Url(p),
+      .d = convertIntegerToBase64Url(d),
+      .e = convertIntegerToBase64Url(e),
       .public_key = pem_public,
       .private_key = pem_private
     };
