@@ -28,14 +28,14 @@ using namespace rncryptopp::jsiHelper;
 
 namespace rncryptopp::HostObjects {
   class JSI_EXPORT HashHostObject : public jsi::HostObject {
-  public:
-    HashHostObject(std::string name);
-    jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;
-    std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
+    public:
+      HashHostObject(std::string name);
+      jsi::Value get(jsi::Runtime &, const jsi::PropNameID &name) override;
+      std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
 
-  private:
-    std::string hashName;
-    std::string hashData;
+    private:
+      std::string hashName;
+      std::string hashData;
   };
 
   jsi::Value createHashHostObject(jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *args, size_t count);

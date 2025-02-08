@@ -25,9 +25,10 @@ namespace rncryptopp::hash {
       CRC32 hash;
       word32 digest = 0;
       hash.CalculateDigest(
-          reinterpret_cast<CryptoPP::byte *>(&digest),
-          reinterpret_cast<CryptoPP::byte const *>(data.stringValue.data()),
-          data.stringValue.size());
+        reinterpret_cast<CryptoPP::byte *>(&digest),
+        reinterpret_cast<CryptoPP::byte const *>(data.stringValue.data()),
+        data.stringValue.size()
+      );
       std::stringstream ss;
       ss << std::hex << digest;
       *result = ss.str();

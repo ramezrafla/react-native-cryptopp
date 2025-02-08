@@ -5,8 +5,7 @@
 namespace rncryptopp::HostObjects {
   HashHostObject::HashHostObject(std::string name) { hashName = std::move(name); }
 
-  std::vector<jsi::PropNameID>
-  HashHostObject::getPropertyNames(jsi::Runtime &rt) {
+  std::vector<jsi::PropNameID> HashHostObject::getPropertyNames(jsi::Runtime &rt) {
     std::vector<jsi::PropNameID> result;
     result.push_back(jsi::PropNameID::forUtf8(rt, std::string("update")));
     result.push_back(jsi::PropNameID::forUtf8(rt, std::string("finalize")));
