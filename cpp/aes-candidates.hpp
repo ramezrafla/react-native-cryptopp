@@ -5,7 +5,6 @@
 #include <string>
 
 #include "cryptopp/modes.h"
-
 #include "cryptopp/ccm.h"
 #include "cryptopp/eax.h"
 #include "cryptopp/gcm.h"
@@ -35,10 +34,17 @@ namespace rncryptopp::aescandidates {
         );
       }
       catch (std::exception err){
-        e.SetKey(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size());
+        e.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
       }
       std::string encrypted;
-      StringSource _(*data, true, new StreamTransformationFilter(e, new StringSink(*result)));
+      StringSource _(
+        *data,
+        true,
+        new StreamTransformationFilter(e, new StringSink(*result))
+      );
     }
     if (execType == DECRYPT) {
       typename T_Mode<T_BlockCipher>::Decryption d;
@@ -51,21 +57,72 @@ namespace rncryptopp::aescandidates {
         );
       }
       catch (std::exception err){
-        d.SetKey(reinterpret_cast<const CryptoPP::byte *>(key->data()), key->size());
+        d.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
       }
-      StringSource s(*data, true, new StreamTransformationFilter(d, new StringSink(*result)));
+      StringSource s(
+        *data,
+        true,
+        new StreamTransformationFilter(d, new StringSink(*result))
+      );
+    }
+  }
+
+  void execGCM(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
+    if (execType == ENCRYPT) {
+      typename GCM<AES>::Encryption e;
+      try {
+        e.SetKeyWithIV(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size(),
+          reinterpret_cast<const CryptoPP::byte *>(iv->data()),
+          iv->size()
+        );
+      }
+      catch (std::exception err){
+        e.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
+      }
+      std::string encrypted;
+      StringSource _(
+        *data,
+        true,
+        new AuthenticatedEncryptionFilter(e, new StringSink(*result))
+      );
+    }
+    if (execType == DECRYPT) {
+      typename GCM<AES>::Decryption d;
+      try{
+        d.SetKeyWithIV(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size(),
+          reinterpret_cast<const CryptoPP::byte *>(iv->data()),
+          iv->size()
+        );
+      }
+      catch (std::exception err){
+        d.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
+      }
+      StringSource s(
+        *data,
+        true,
+        new AuthenticatedDecryptionFilter(d, new StringSink(*result))
+      );
     }
   }
 
   template <class T_BlockCipher, typename... R>
   bool getModeAndExec(std::string &mode, R... rest) {
-    if (mode == "ecb") exec<ECB_Mode, T_BlockCipher>(rest...);
+    if (mode == "gcm") execGCM(rest...);
     else if (mode == "cbc") exec<CBC_Mode, T_BlockCipher>(rest...);
-    else if (mode == "cbc_cts") exec<CBC_CTS_Mode, T_BlockCipher>(rest...);
-    else if (mode == "cfb") exec<CFB_Mode, T_BlockCipher>(rest...);
-    else if (mode == "ofb") exec<OFB_Mode, T_BlockCipher>(rest...);
     else if (mode == "ctr") exec<CTR_Mode, T_BlockCipher>(rest...);
-    else if (mode == "xts") exec<XTS_Mode, T_BlockCipher>(rest...);
     else return false;
     return true;
   }
@@ -107,7 +164,7 @@ namespace rncryptopp::aescandidates {
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt invalid number of arguments");
 
     if(!isDataStringOrAB(args->at(1)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt data is not a string");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt data is not a string or ArrayBuffer");
 
     if(!isDataStringOrAB(args->at(2)))
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt key is not a string or ArrayBuffer");

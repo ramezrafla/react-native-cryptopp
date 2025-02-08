@@ -14,30 +14,12 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName, bool 
   */
   else if (fnName == "AES_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "AES_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "RC6_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::RC6>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "RC6_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::RC6>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "MARS_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::MARS>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "MARS_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::MARS>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "Twofish_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::Twofish>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "Twofish_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::Twofish>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "Serpent_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::Serpent>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "Serpent_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::Serpent>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "CAST256_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::CAST256>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "CAST256_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::CAST256>(rt, args, stringTarget, targetType, targetEncoding);
-  /*
-  Insecure
-  */
-  else if (fnName == "insecure_md2") rncryptopp::insecure::md2(rt, args, *stringTarget);
-  else if (fnName == "insecure_md4") rncryptopp::insecure::md4(rt, args, *stringTarget);
-  else if (fnName == "insecure_md5") rncryptopp::insecure::md5(rt, args, *stringTarget);
 
   /*
    * Message authentication codes
    */
   else if (fnName == "HMAC_generate") rncryptopp::hmac::generate(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "HMAC_verify") rncryptopp::hmac::verify(rt, args, boolTarget, targetType);
-  else if (fnName == "CMAC_generate") rncryptopp::cmac::generate(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "CMAC_verify") rncryptopp::cmac::verify(rt, args, boolTarget, targetType);
 
   /*
   Utils
@@ -53,10 +35,7 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName, bool 
    * Public Key Derivation Functions
    */
   else if (fnName == "key_derivation_HKDF") rncryptopp::keyderivation::hkdf(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "key_derivation_PKCS12_PBKDF") rncryptopp::keyderivation::pbkdf12(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "key_derivation_PKCS5_PBKDF1") rncryptopp::keyderivation::pkcs5_pbkdf1(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "key_derivation_PKCS5_PBKDF2") rncryptopp::keyderivation::pkcs5_pbkdf2(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "key_derivation_Scrypt") rncryptopp::keyderivation::scrypt(rt, args, stringTarget, targetType, targetEncoding);
 
   /*
   Public-key cryptography
@@ -88,7 +67,8 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
 
   // Individual hashes
   module.setProperty(
-    jsiRuntime, "exec",
+    jsiRuntime,
+    "exec",
     jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_sync"), 5,
       [](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
@@ -137,7 +117,8 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
   *************************************************************************************************/
 
   module.setProperty(
-    jsiRuntime, "exec_async",
+    jsiRuntime,
+    "exec_async",
     jsi::Function::createFromHostFunction(
       jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
       [pool](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
