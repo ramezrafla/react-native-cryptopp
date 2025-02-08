@@ -14,10 +14,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
         );
       }
       catch (std::exception err){
-        e.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       std::string encrypted;
       StringSource _(
@@ -37,10 +34,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
         );
       }
       catch (std::exception err){
-        d.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       StringSource s(
         *data,
