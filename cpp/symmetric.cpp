@@ -1,11 +1,10 @@
-#include "aes.h"
+#include "symmetric.h"
 
-namespace rncryptopp::aes {
+namespace rncryptopp::symmetric {
 
-  template <template <class> class T_Mode, class T_BlockCipher>
-  void exec(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
+void execCBC(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
-      typename T_Mode<T_BlockCipher>::Encryption e;
+      CBC_Mode<AES>::Encryption e;
       try {
         e.SetKeyWithIV(
           reinterpret_cast<const CryptoPP::byte *>(key->data()),
@@ -28,7 +27,56 @@ namespace rncryptopp::aes {
       );
     }
     if (execType == DECRYPT) {
-      typename T_Mode<T_BlockCipher>::Decryption d;
+      CBC_Mode<AES>::Decryption d;
+      try{
+        d.SetKeyWithIV(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size(),
+          reinterpret_cast<const CryptoPP::byte *>(iv->data()),
+          iv->size()
+        );
+      }
+      catch (std::exception err){
+        d.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
+      }
+      StringSource s(
+        *data,
+        true,
+        new StreamTransformationFilter(d, new StringSink(*result))
+      );
+    }
+  }
+
+
+  void execCTR(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
+    if (execType == ENCRYPT) {
+      CTR_Mode<AES>::Encryption e;
+      try {
+        e.SetKeyWithIV(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size(),
+          reinterpret_cast<const CryptoPP::byte *>(iv->data()),
+          iv->size()
+        );
+      }
+      catch (std::exception err){
+        e.SetKey(
+          reinterpret_cast<const CryptoPP::byte *>(key->data()),
+          key->size()
+        );
+      }
+      std::string encrypted;
+      StringSource _(
+        *data,
+        true,
+        new StreamTransformationFilter(e, new StringSink(*result))
+      );
+    }
+    if (execType == DECRYPT) {
+      CTR_Mode<AES>::Decryption d;
       try{
         d.SetKeyWithIV(
           reinterpret_cast<const CryptoPP::byte *>(key->data()),
@@ -53,7 +101,7 @@ namespace rncryptopp::aes {
 
   void execGCM(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
-      typename GCM<AES>::Encryption e;
+      GCM<AES>::Encryption e;
       try {
         e.SetKeyWithIV(
           reinterpret_cast<const CryptoPP::byte *>(key->data()),
@@ -73,7 +121,7 @@ namespace rncryptopp::aes {
       );
     }
     if (execType == DECRYPT) {
-      typename GCM<AES>::Decryption d;
+      GCM<AES>::Decryption d;
       try{
         d.SetKeyWithIV(
           reinterpret_cast<const CryptoPP::byte *>(key->data()),
@@ -93,16 +141,14 @@ namespace rncryptopp::aes {
     }
   }
 
-  template <class T_BlockCipher, typename... R>
   bool getModeAndExec(std::string &mode, R... rest) {
     if (mode == "gcm") execGCM(rest...);
-    else if (mode == "cbc") exec<CBC_Mode, T_BlockCipher>(rest...);
-    else if (mode == "ctr") exec<CTR_Mode, T_BlockCipher>(rest...);
+    else if (mode == "cbc") execCBC(rest...);
+    else if (mode == "ctr") execCTR(rest...);
     else return false;
     return true;
   }
 
-  template <typename T_BlockCipher>
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt invalid number of arguments");
@@ -126,14 +172,13 @@ namespace rncryptopp::aes {
     decodeJSIString(args->at(3), &iv, ENCODING_HEX);
 
     // Encrypt
-    if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, ENCRYPT))
+    if (!getModeAndExec(mode, &key, &iv, &data, target, ENCRYPT))
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
   }
 
-  template <typename T_BlockCipher>
   void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt invalid number of arguments");
@@ -158,7 +203,7 @@ namespace rncryptopp::aes {
     std::string mode = args->at(4).stringValue;
 
     // Decrypt
-    if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, DECRYPT))
+    if (!getModeAndExec(mode, &key, &iv, &data, target, DECRYPT))
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;

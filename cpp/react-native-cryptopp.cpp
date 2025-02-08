@@ -13,8 +13,8 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName, bool 
   /*
   AES
   */
-  else if (fnName == "AES_encrypt") rncryptopp::aes::encrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "AES_decrypt") rncryptopp::aes::decrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "AES_encrypt") rncryptopp::symmetric::encrypt(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "AES_decrypt") rncryptopp::symmetric::decrypt(rt, args, stringTarget, targetType, targetEncoding);
 
   /*
    * Message authentication codes

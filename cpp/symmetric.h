@@ -17,20 +17,12 @@ using namespace facebook::jsi::detail;
 using namespace CryptoPP;
 using namespace rncryptopp::jsiHelper;
 
-namespace rncryptopp::aes {
+namespace rncryptopp::symmetric {
   enum ExecType {ENCRYPT,DECRYPT,};
-
-  template <template <class> class T_Mode, class T_BlockCipher>
-  void exec(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
-
-  template <class T_BlockCipher, typename... R>
-  bool getModeAndExec(std::string &mode, R... rest);
-
-  template <typename T_BlockCipher>
-  void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-
-  template <typename T_BlockCipher>
-  void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
-
   void execGCM(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
+  void execCBC(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
+  void execCTR(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType);
+  bool getModeAndExec(std::string &mode, R... rest);
+  void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+  void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
 }
