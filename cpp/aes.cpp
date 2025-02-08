@@ -2,8 +2,6 @@
 
 namespace rncryptopp::aes {
 
-  enum ExecType {ENCRYPT,DECRYPT,};
-
   template <template <class> class T_Mode, class T_BlockCipher>
   void exec(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
@@ -107,19 +105,19 @@ namespace rncryptopp::aes {
   template <typename T_BlockCipher>
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt invalid number of arguments");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt invalid number of arguments");
 
     if(!isDataStringOrAB(args->at(1)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt data is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt data is not a string or ArrayBuffer");
 
     if(!isDataStringOrAB(args->at(2)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt key is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt key is not a string or ArrayBuffer");
 
     if(!isDataStringOrAB(args->at(3)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt iv is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt iv is not a string or ArrayBuffer");
 
     if(!isDataString(args->at(4)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt mode is not a string");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt mode is not a string");
 
     std::string data = args->at(1).stringValue;
     std::string mode = args->at(4).stringValue;
@@ -129,7 +127,7 @@ namespace rncryptopp::aes {
 
     // Encrypt
     if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, ENCRYPT))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates encrypt mode is not a valid mode");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
@@ -138,19 +136,19 @@ namespace rncryptopp::aes {
   template <typename T_BlockCipher>
   void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt invalid number of arguments");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt invalid number of arguments");
 
     if(!isDataStringOrAB(args->at(1)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt data is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt data is not a string or ArrayBuffer");
 
     if(!isDataStringOrAB(args->at(2)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt key is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt key is not a string or ArrayBuffer");
 
     if(!isDataStringOrAB(args->at(3)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt iv is not a string or ArrayBuffer");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt iv is not a string or ArrayBuffer");
 
     if(!isDataString(args->at(4)))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt mode is not a string");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt mode is not a string");
 
     auto dataEncoding = getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
     std::string data, key, iv;
@@ -161,7 +159,7 @@ namespace rncryptopp::aes {
 
     // Decrypt
     if (!getModeAndExec<T_BlockCipher>(mode, &key, &iv, &data, target, DECRYPT))
-      throw facebook::jsi::JSError(rt, "RNCryptopp: aes & candidates decrypt mode is not a valid mode");
+      throw facebook::jsi::JSError(rt, "RNCryptopp: aes decrypt mode is not a valid mode");
 
     *targetType = args->at(1).dataType;
     *targetEncoding = ENCODING_UTF8;
