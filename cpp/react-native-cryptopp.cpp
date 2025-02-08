@@ -89,17 +89,14 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
         // RSA key pair generation is the only function returning an Object
         if (fnName == "rsa_generateKeyPair") {
           auto keyPair = rncryptopp::rsa::generateKeyPair(rt, &args);
-          jsi::Object params = jsi::Object(rt);
-          params.setProperty(rt, "n", keyPair.n);
-          params.setProperty(rt, "p", keyPair.p);
-          params.setProperty(rt, "q", keyPair.q);
-          params.setProperty(rt, "d", keyPair.d);
-          params.setProperty(rt, "e", keyPair.e);
-
           jsi::Object result = jsi::Object(rt);
+          result.setProperty(rt, "n", keyPair.n);
+          result.setProperty(rt, "p", keyPair.p);
+          result.setProperty(rt, "q", keyPair.q);
+          result.setProperty(rt, "d", keyPair.d);
+          result.setProperty(rt, "e", keyPair.e);
           result.setProperty(rt, "public", keyPair.public_key);
           result.setProperty(rt, "private", keyPair.private_key);
-          result.setProperty(rt, "params", params);
           return result;
         }
 
