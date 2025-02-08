@@ -63,10 +63,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
         );
       }
       catch (std::exception err){
-        e.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       std::string encrypted;
       StringSource _(
@@ -86,10 +83,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
         );
       }
       catch (std::exception err){
-        d.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       StringSource s(
         *data,
@@ -98,6 +92,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
       );
     }
   }
+
 
   void execGCM(std::string *key, std::string *iv, std::string *data, std::string *result, ExecType execType) {
     if (execType == ENCRYPT) {
@@ -141,6 +136,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
     }
   }
 
+
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt invalid number of arguments");
@@ -172,6 +168,7 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
     *targetType = args->at(1).dataType;
     *targetEncoding = getEncodingFromArgs(rt, args, 5, ENCODING_BASE64, false);
   }
+
 
   void decrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
     if(args->size() < 5)
