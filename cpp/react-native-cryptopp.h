@@ -6,7 +6,7 @@
 
 #include "JSIHelper.h"
 #include "ThreadPool.h"
-#include "aes-candidates.hpp"
+#include "aes.h"
 #include "hash-functions-ho.h"
 #include "hash-functions.h"
 #include "helpers.h"

@@ -1,23 +1,6 @@
-#pragma once
+#include "aes.h"
 
-#include <jsi/jsi.h>
-#include <jsi/jsilib.h>
-#include <string>
-
-#include "cryptopp/modes.h"
-#include "cryptopp/ccm.h"
-#include "cryptopp/eax.h"
-#include "cryptopp/gcm.h"
-#include "cryptopp/xts.h"
-
-#include "helpers.h"
-
-using namespace facebook;
-using namespace facebook::jsi::detail;
-using namespace CryptoPP;
-using namespace rncryptopp::jsiHelper;
-
-namespace rncryptopp::aescandidates {
+namespace rncryptopp::aes {
 
   enum ExecType {ENCRYPT,DECRYPT,};
 
@@ -82,10 +65,7 @@ namespace rncryptopp::aescandidates {
         );
       }
       catch (std::exception err){
-        e.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       std::string encrypted;
       StringSource _(
@@ -105,10 +85,7 @@ namespace rncryptopp::aescandidates {
         );
       }
       catch (std::exception err){
-        d.SetKey(
-          reinterpret_cast<const CryptoPP::byte *>(key->data()),
-          key->size()
-        );
+        return;
       }
       StringSource s(
         *data,

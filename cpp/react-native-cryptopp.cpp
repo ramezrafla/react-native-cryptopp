@@ -9,11 +9,12 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName, bool 
   Hashes
   */
   if (fnName == "hash") rncryptopp::hash::hash(rt, args, stringTarget);
+
   /*
-  AES and AES candidates
+  AES
   */
-  else if (fnName == "AES_encrypt") rncryptopp::aescandidates::encrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
-  else if (fnName == "AES_decrypt") rncryptopp::aescandidates::decrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "AES_encrypt") rncryptopp::aes::encrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "AES_decrypt") rncryptopp::aes::decrypt<CryptoPP::AES>(rt, args, stringTarget, targetType, targetEncoding);
 
   /*
    * Message authentication codes
