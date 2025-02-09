@@ -118,7 +118,8 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
     jsiRuntime,
     "exec_async",
     jsi::Function::createFromHostFunction(
-      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"), 1,
+      jsiRuntime, jsi::PropNameID::forAscii(jsiRuntime, "exec_async"),
+      1,
       [pool](jsi::Runtime &rt, const jsi::Value &thisValue, const jsi::Value *functionArgs, size_t count) -> jsi::Value {
         CppArgs args;
         parseJSIArgs(rt, functionArgs, count, &args);
@@ -156,18 +157,14 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
                     auto sharedKeyPair = std::make_shared<RSAKeyPair>(keyPair);
 
                     invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
-                      jsi::Object params = jsi::Object(rt);
-                      params.setProperty(rt, "n", (*sharedKeyPair.get()).n);
-                      params.setProperty(rt, "p", (*sharedKeyPair.get()).p);
-                      params.setProperty(rt, "q", (*sharedKeyPair.get()).q);
-                      params.setProperty(rt, "d", (*sharedKeyPair.get()).d);
-                      params.setProperty(rt, "e", (*sharedKeyPair.get()).e);
-
                       jsi::Object result = jsi::Object(rt);
+                      result.setProperty(rt, "n", (*sharedKeyPair.get()).n);
+                      result.setProperty(rt, "p", (*sharedKeyPair.get()).p);
+                      result.setProperty(rt, "q", (*sharedKeyPair.get()).q);
+                      result.setProperty(rt, "d", (*sharedKeyPair.get()).d);
+                      result.setProperty(rt, "e", (*sharedKeyPair.get()).e);
                       result.setProperty(rt, "public", (*sharedKeyPair.get()).public_key);
                       result.setProperty(rt, "private", (*sharedKeyPair.get()).private_key);
-                      result.setProperty(rt, "params", params);
-
                       resolve->asObject(rt).asFunction(rt).call(rt, result);
                     });
                     return;
