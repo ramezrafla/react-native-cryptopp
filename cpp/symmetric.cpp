@@ -132,10 +132,8 @@ void execCBC(std::string *key, std::string *iv, std::string *data, std::string *
 
 
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding){
-    /*
     if(args->size() < 5)
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt invalid number of arguments");
-    */
 
     if(!isDataStringOrAB(args->at(1)))
       throw facebook::jsi::JSError(rt, "RNCryptopp: aes encrypt data is not a string or ArrayBuffer");
