@@ -28,7 +28,11 @@ AES_BLOCK_CIPHERS.forEach((cipherName) => {
   const encryptName = `${cipherName}_encrypt`;
   const decryptName = `${cipherName}_decrypt`;
   CryptoppModule[cipherName] = {
-    encrypt: (...p: any) => exec(encryptName, ...p),
+    encrypt: (...p: any) => {
+      console.log('arguments');
+      console.log(p);
+      return exec(encryptName, ...p);
+    },
     decrypt: (...p: any) => exec(decryptName, ...p),
   };
   CryptoppModule.async[cipherName] = {
