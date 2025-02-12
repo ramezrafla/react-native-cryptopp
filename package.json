@@ -37,7 +37,8 @@
     "prepare": "bob build && husky install",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
-    "compile_cryptopp": "npx node scripts/compile_cryptopp.js"
+    "compile_cryptopp": "npx node scripts/compile_cryptopp.js",
+    "postinstall": "yarn node node_modules/react-native-cryptopp/scripts/download_cryptopp.js"
   },
   "keywords": [
     "react-native",
@@ -149,5 +150,6 @@
         }
       ]
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
