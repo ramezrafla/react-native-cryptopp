@@ -37,8 +37,7 @@
     "prepare": "bob build && husky install",
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
-    "compile_cryptopp": "npx node scripts/compile_cryptopp.js",
-    "postinstall": "npx node scripts/download_cryptopp.js"
+    "compile_cryptopp": "npx node scripts/compile_cryptopp.js"
   },
   "keywords": [
     "react-native",
