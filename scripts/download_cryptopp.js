@@ -48,6 +48,14 @@ const files = [
 // example: https://github.com/JiriHoffmann/react-native-cryptopp/releases/download/cryptopp_8.6.0/cryptopp.zip
 const link = 'https://caoneofficecdn.s3.us-east-1.amazonaws.com/build/'
 
+
+try {
+  fs.mkdirSync(cppDir)
+}
+catch (e) {
+  // console.log(e)
+}
+
 console.log('Downloading compiled Crypto++ from...')
 console.log(link)
 
