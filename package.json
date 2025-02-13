@@ -60,6 +60,7 @@
   "repository": "https://github.com/JiriHoffmann/react-native-cryptopp",
   "author": "Jiri Hoffmann <hoffmaji@mail.gvsu.edu> (https://github.com/JiriHoffmann)",
   "license": "MIT",
+  "homepage": "https://github.com/JiriHoffmann/react-native-cryptopp#readme",
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.2.0",
     "@types/node": "^22.13.2",
