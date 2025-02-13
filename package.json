@@ -38,7 +38,7 @@
     "release": "release-it",
     "clang-format": "find cpp/ -iname *.h -o -iname *.cpp | xargs clang-format -i",
     "compile_cryptopp": "npx node scripts/compile_cryptopp.js",
-    "preinstall": "npx node scripts/download_cryptopp.js"
+    "_preinstall": "npx node scripts/download_cryptopp.js"
   },
   "keywords": [
     "react-native",
