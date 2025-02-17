@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# on remote server
+# ./scripts/compile_cryptopp_android.sh android-24 $PWD /usr/lib/android-sdk /usr/lib/android-sdk/ndk/26.1.10909125
+
+
 ANDROID_PLATFORM=$1
 export ANDROID_API="${ANDROID_PLATFORM: -2}" # getting android version -- i.e. android-21 --> 21
 CWD=$2 # Path to the root of the project
@@ -38,7 +43,7 @@ function build_cryptopp_android
 cd "$CWD"
 mkdir -p "$CWD/cpp/cryptopp"
 mkdir -p "$CWD/cpp/android"
-sh scripts/copy_external_libs.sh
+sh ./scripts/copy_external_libs.sh
 
 # # #########################################
 # # #####            Android            #####

@@ -102,7 +102,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
           return result;
         }
 
-        if (fName == "ed25519_generateKeyPair") {
+        if (fnName == "ed25519_generateKeyPair") {
           auto keyPair = rncryptopp::ed25519::generateKeyPair(rt, &args);
           jsi::Object result = jsi::Object(rt);
           result.setProperty(rt, "x", keyPair.x);
@@ -181,7 +181,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
                   }
 
 
-                  if (fName == "ed25519_generateKeyPair") {
+                  if (fnName == "ed25519_generateKeyPair") {
                     auto keyPair = rncryptopp::ed25519::generateKeyPair(rt, &args);
                     auto sharedKeyPair = std::make_shared<ED25519KeyPair>(keyPair);
 
@@ -193,7 +193,7 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
                     });
                     return;
                   }
-          
+
 
                   // All other functionality executed here:
                   execCppFunction(
