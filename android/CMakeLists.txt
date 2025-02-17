@@ -53,14 +53,18 @@ include_directories(
 # Find JSI on React Native 0.66.x and above
 # else manually add JSI on React Native 0.65.x and below
 # and add all project source files
-file(GLOB RN_CRYPTOPP_FILES "../cpp/*.cpp")
+file(GLOB RN_CRYPTOPP_CPP_FILES "../cpp/*.cpp")
+file(GLOB RN_CRYPTOPP_C_FILES "../cpp/*.c")
+file(GLOB RN_CRYPTOPP_H_FILES "../cpp/*.h")
 file(GLOB RN_CRYPTOPP_HO_FILES "../cpp/host_objects/*.cpp")
 file(GLOB RN_CRYPTOPP_HPP_FILES "../cpp/*.hpp")
 
 add_library(
         ${PACKAGE_NAME}
         SHARED
-        ${RN_CRYPTOPP_FILES}
+        ${RN_CRYPTOPP_CPP_FILES}
+        ${RN_CRYPTOPP_C_FILES}
+        ${RN_CRYPTOPP_F_FILES}
         ${RN_CRYPTOPP_HPP_FILES}
         ${RN_CRYPTOPP_HO_FILES}
         ${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp
