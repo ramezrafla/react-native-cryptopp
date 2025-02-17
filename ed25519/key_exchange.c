@@ -1,5 +1,4 @@
-#include "ed25519.h"
-#include "fe.h"
+#include "key_exchange.h"
 
 void ed25519_key_exchange(unsigned char *shared_secret, const unsigned char *public_key, const unsigned char *private_key) {
     unsigned char e[32];

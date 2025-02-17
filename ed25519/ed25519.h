@@ -1,6 +1,18 @@
 #ifndef ED25519_H
 #define ED25519_H
 
+#include "fe.h"
+#include "fixedint.h"
+#include "ge.h"
+#include "key_exchange.h"
+#include "keypair.h"
+#include "precomp_data.h"
+#include "sc.h"
+#include "seed.h"
+#include "sha512.h"
+#include "sign.h"
+#include "verify.h"
+
 #include <stddef.h>
 
 #if defined(_WIN32)
