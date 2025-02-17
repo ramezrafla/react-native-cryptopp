@@ -1,7 +1,7 @@
 #ifndef GE_H
 #define GE_H
 
-#include "fe.h"
+#include "ed_fe.h"
 
 
 /*

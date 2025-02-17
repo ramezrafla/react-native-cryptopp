@@ -1,17 +1,17 @@
 #ifndef ED25519_H
 #define ED25519_H
 
-#include "fe.h"
-#include "fixedint.h"
-#include "ge.h"
-#include "key_exchange.h"
-#include "keypair.h"
-#include "precomp_data.h"
-#include "sc.h"
-#include "seed.h"
-#include "sha512.h"
-#include "sign.h"
-#include "verify.h"
+#include "ed_fe.h"
+#include "ed_fixedint.h"
+#include "ed_ge.h"
+#include "ed_key_exchange.h"
+#include "ed_keypair.h"
+#include "ed_precomp_data.h"
+#include "ed_sc.h"
+#include "ed_seed.h"
+#include "ed_sha512.h"
+#include "ed_sign.h"
+#include "ed_verify.h"
 
 #include <stddef.h>
 

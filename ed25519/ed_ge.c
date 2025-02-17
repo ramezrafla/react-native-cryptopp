@@ -1,5 +1,5 @@
-#include "ge.h"
-#include "precomp_data.h"
+#include "ed_ge.h"
+#include "ed_precomp_data.h"
 
 
 /*

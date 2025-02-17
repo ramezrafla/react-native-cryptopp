@@ -1,4 +1,4 @@
-#include "sign.h"
+#include "ed_sign.h"
 
 void ed25519_sign(unsigned char *signature, const unsigned char *message, size_t message_len, const unsigned char *public_key, const unsigned char *private_key) {
     sha512_context hash;
