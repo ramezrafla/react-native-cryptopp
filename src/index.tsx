@@ -131,6 +131,16 @@ CryptoppModule.async.RSA = {
   verify: (...p: any) => execAsync('rsa_verify', ...p),
   recover: (...p: any) => execAsync('rsa_recover', ...p),
 };
+CryptoppModule.ED25519 = {
+  generateKeyPair: (...p: any) => exec('ed25519_generateKeyPair', ...p),
+  sign: (...p: any) => exec('ed25519_sign', ...p),
+  verify: (...p: any) => exec('ed25519_verify', ...p),
+};
+CryptoppModule.async.ED25519 = {
+  generateKeyPair: (...p: any) => execAsync('ed25519_generateKeyPair', ...p),
+  sign: (...p: any) => execAsync('ed25519_sign', ...p),
+  verify: (...p: any) => execAsync('ed25519_verify', ...p),
+};
 
 export default CryptoppModule as Cryptopp;
 export * from './types';

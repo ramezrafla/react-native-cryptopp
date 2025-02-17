@@ -46,6 +46,8 @@ void execCppFunction(jsi::Runtime &rt, CppArgs *args, std::string &fnName, bool 
   else if (fnName == "rsa_sign") rncryptopp::rsa::sign(rt, args, stringTarget, targetType, targetEncoding);
   else if (fnName == "rsa_verify") rncryptopp::rsa::verify(rt, args, boolTarget, targetType);
   else if (fnName == "rsa_recover") rncryptopp::rsa::recover(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "ed25519_sign") rncryptopp::ed25519::sign(rt, args, stringTarget, targetType, targetEncoding);
+  else if (fnName == "ed25519_verify") rncryptopp::ed25519::verify(rt, args, boolTarget, targetType);
 }
 
 void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInvoker> jsCallInvoker) {
@@ -97,6 +99,14 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
           result.setProperty(rt, "e", keyPair.e);
           result.setProperty(rt, "public", keyPair.public_key);
           result.setProperty(rt, "private", keyPair.private_key);
+          return result;
+        }
+
+        if (fName == "ed25519_generateKeyPair") {
+          auto keyPair = rncryptopp::ed25519::generateKeyPair(rt, &args);
+          jsi::Object result = jsi::Object(rt);
+          result.setProperty(rt, "x", keyPair.x);
+          result.setProperty(rt, "d", keyPair.d);
           return result;
         }
 
@@ -169,6 +179,21 @@ void rncryptopp_install(jsi::Runtime &jsiRuntime, std::shared_ptr<react::CallInv
                     });
                     return;
                   }
+
+
+                  if (fName == "ed25519_generateKeyPair") {
+                    auto keyPair = rncryptopp::ed25519::generateKeyPair(rt, &args);
+                    auto sharedKeyPair = std::make_shared<ED25519KeyPair>(keyPair);
+
+                    invoker->invokeAsync([&rt, resolve, sharedKeyPair] {
+                      jsi::Object result = jsi::Object(rt);
+                      result.setProperty(rt, "d", (*sharedKeyPair.get()).d);
+                      result.setProperty(rt, "x", (*sharedKeyPair.get()).x);
+                      return result;
+                    });
+                    return;
+                  }
+          
 
                   // All other functionality executed here:
                   execCppFunction(

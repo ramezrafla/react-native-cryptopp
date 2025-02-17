@@ -10,6 +10,7 @@
 #include "cryptopp/rsa.h"
 #include "cryptopp/whrlpool.h"
 #include "cryptopp/base64.h"
+#include "cryptopp/ed25519.h"
 
 #include "helpers.h"
 
@@ -27,6 +28,11 @@ struct RSAKeyPair {
   std::string private_key;
 };
 
+struct ED25519KeyPair {
+  std::string d;
+  std::string x;
+};
+
 namespace rncryptopp::rsa {
   RSAKeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args);
   void encrypt(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
@@ -35,3 +41,9 @@ namespace rncryptopp::rsa {
   void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType);
   void recover(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
 } // namespace rncryptopp::rsa
+
+namespace rncryptopp::ed25519 {
+  ED25519KeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args);
+  void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding);
+  void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType);
+}

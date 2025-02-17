@@ -302,7 +302,8 @@ namespace rncryptopp::rsa {
       if (signScheme == "PSSR_SHA1") {
         RSASS<PSSR, SHA1>::Verifier verifier(publicKey);
         StringSource(
-          signature, true,
+          signature,
+          true,
           new SignatureVerificationFilter(verifier, new StringSink(*target), THROW_EXCEPTION | PUT_MESSAGE)
         );
       }
@@ -316,7 +317,8 @@ namespace rncryptopp::rsa {
       else if (signScheme == "PSSR_Whirlpool") {
         RSASS<PSSR, Whirlpool>::Verifier verifier(publicKey);
         StringSource(
-          signature, true,
+          signature,
+          true,
           new SignatureVerificationFilter(verifier, new StringSink(*target), THROW_EXCEPTION | PUT_MESSAGE)
         );
       }
@@ -332,3 +334,95 @@ namespace rncryptopp::rsa {
     *targetEncoding = ENCODING_UTF8;
   }
 } // namespace rncryptopp::rsa
+
+
+
+
+namespace rncryptopp::ed25519 {
+  ED25519KeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
+
+    unsigned char seed[32], public_key[32], private_key[64];
+
+    if (ed25519_create_seed(seed)) {
+      printf("error while generating seed\n");
+      return;
+    }
+  
+    ed25519_create_keypair(public_key, private_key, seed);
+
+    std::string d(private_key);
+    std::string x(public_key);
+
+    return ED25519KeyPair{
+      .d = d,
+      .x = x
+    };
+  }
+
+
+  void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
+    if (args->size() != 4)
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 sign invalid number of arguments");
+
+    if (!isDataStringOrAB(args->at(1)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 sign privateKey is not a string or arraybuffer");
+
+    if (!isDataStringOrAB(args->at(2)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 sign publicKey is not a string or arraybuffer");
+
+    if (!isDataStringOrAB(args->at(3)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 sign message is not a string or arraybuffer");
+
+    std::string d = args->at(1).stringValue;
+    std::string x = args->at(2).stringValue;
+    std::string message = args->at(3).stringValue;
+    std::string target = args->at(4).stringValue;
+
+    ed25519_sign(
+      (unsigned char *)(target.c_str()),
+      (unsigned char*)(m.c_str()), m.length(),
+      (unsigned char*)(x.c_str()), (unsigned char*)(d._str())
+    );
+
+    *targetType = args->at(1).dataType;
+    *targetEncoding = ENCODING_UTF8;
+  }
+
+  void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType) {
+    if (args->size() != 3)
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify invalid number of arguments");
+
+    if (!isDataStringOrAB(args->at(1)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify publicKey is not a string or arraybuffer");
+
+    if (!isDataStringOrAB(args->at(2)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify signature is not a string or arraybuffer");
+
+    if (!isDataStringOrAB(args->at(3)))
+      throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify message is not a string or arraybuffer");
+
+    std::string x = args->at(1).stringValue;
+    std::string signature = args->at(2).stringValue;
+    std::string message = args->at(3).stringValue;
+
+    int result = ed25519_verify(
+      (const unsigned char *)(signature.c_str()),
+      (const unsigned char *)(message.c_str()), message.length(),
+      (const unsigned char *)(x.c_str())
+    );
+
+    *target = result > 0;
+    *targetType = jsiHelper::BOOLEAN;
+  }
+
+
+} // namespace rncryptopp::ed25519
+
+
+
+
+
+
+
+
+

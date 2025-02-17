@@ -10,7 +10,6 @@
 #include "hash-functions-ho.h"
 #include "hash-functions.h"
 #include "helpers.h"
-#include "insecure.h"
 #include "key-derivation.h"
 #include "message-authentication.h"
 #include "public-key.h"

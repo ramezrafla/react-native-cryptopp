@@ -38,7 +38,7 @@ function build_cryptopp_android
 cd "$CWD"
 mkdir -p "$CWD/cpp/cryptopp"
 mkdir -p "$CWD/cpp/android"
-sh scripts/copy_pem_pack.sh
+sh scripts/copy_external_libs.sh
 
 # # #########################################
 # # #####            Android            #####

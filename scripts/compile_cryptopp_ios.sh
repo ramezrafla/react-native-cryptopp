@@ -25,7 +25,7 @@ function build_cryptopp_ios
 # #########################################
 pushd "$CWD"
 mkdir -p "cpp/cryptopp" "cpp/ios"
-sh scripts/copy_pem_pack.sh
+sh scripts/copy_external_libs.sh
 
 pushd "cryptopp"
 make clean

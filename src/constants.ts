@@ -33,12 +33,7 @@ export const HASHES = [
 ] as const;
 
 export const AES_BLOCK_CIPHERS = [
-  'AES',
-  'RC6',
-  'MARS',
-  'Twofish',
-  'Serpent',
-  'CAST256',
+  'AES'
 ] as const;
 
 export const BLOCK_CIPHERS = [
