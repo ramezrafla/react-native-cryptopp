@@ -41,12 +41,6 @@ typedef struct {
 } ge_p1p1;
 
 typedef struct {
-  fe yplusx;
-  fe yminusx;
-  fe xy2d;
-} ge_precomp;
-
-typedef struct {
   fe YplusX;
   fe YminusX;
   fe Z;
