@@ -1,4 +1,3 @@
-#include "ed25519.h"
 #include "ed_ge.h"
 #include "ed_sc.h"
 #include "ed_sha512.h"

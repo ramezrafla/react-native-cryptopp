@@ -64,7 +64,7 @@ add_library(
         SHARED
         ${RN_CRYPTOPP_CPP_FILES}
         ${RN_CRYPTOPP_C_FILES}
-        ${RN_CRYPTOPP_F_FILES}
+        ${RN_CRYPTOPP_H_FILES}
         ${RN_CRYPTOPP_HPP_FILES}
         ${RN_CRYPTOPP_HO_FILES}
         ${NODE_MODULES_DIR}/react-native/ReactCommon/jsi/jsi/jsi.cpp
