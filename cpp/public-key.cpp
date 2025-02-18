@@ -340,7 +340,6 @@ namespace rncryptopp::rsa {
 
 namespace rncryptopp::ed25519 {
   ED25519KeyPair generateKeyPair(jsi::Runtime &rt, CppArgs *args) {
-
     unsigned char seed[32], public_key[32], private_key[64];
 
     if (ed25519_create_seed(seed))
@@ -348,8 +347,13 @@ namespace rncryptopp::ed25519 {
   
     ed25519_create_keypair(public_key, private_key, seed);
 
-    std::string d(&private_key[0], &private_key[63]);
-    std::string x(&public_key[0], &public_key[31]);
+    std::string d;
+    d.resize(64);
+    memcpy((unsigned char *) d.c_str(), (unsigned char *) &private_key[0], 64);
+
+    std::string x;
+    x.resize(32);
+    memcpy((unsigned char *) x.c_str(), (unsigned char *) &public_key[0], 32);
 
     return ED25519KeyPair{
       .d = d,
@@ -357,7 +361,7 @@ namespace rncryptopp::ed25519 {
     };
   }
 
-
+  // d, x, message
   void sign(jsi::Runtime &rt, CppArgs *args, std::string *target, QuickDataType *targetType, StringEncoding *targetEncoding) {
     if (args->size() != 4)
       throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 sign invalid number of arguments");
@@ -387,6 +391,7 @@ namespace rncryptopp::ed25519 {
     *targetEncoding = ENCODING_UTF8;
   }
 
+  // x, signature, message
   void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType) {
     if (args->size() != 4)
       throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify invalid number of arguments");
@@ -410,7 +415,7 @@ namespace rncryptopp::ed25519 {
       (unsigned char *)(x.c_str())
     );
 
-    *target = result > 0;
+    *target = result;
     *targetType = jsiHelper::BOOLEAN;
   }
 
