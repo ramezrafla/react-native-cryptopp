@@ -1,3 +1,6 @@
+#pragma once
+#include "ed_fe.h"
+
 typedef struct {
     fe yplusx;
     fe yminusx;
