@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "ed_fixedint.h"
-
 /* state */
 typedef struct sha512_context_ {
     uint64_t length, state[8];

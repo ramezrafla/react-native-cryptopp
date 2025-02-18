@@ -1,8 +1,6 @@
 #ifndef FE_H
 #define FE_H
 
-#include "ed_fixedint.h"
-
 
 /*
     fe means field element.

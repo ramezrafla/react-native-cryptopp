@@ -1,5 +1,4 @@
 #include "ed_fe.h"
-#include "ed_fixedint.h"
 #include "ed_ge.h"
 #include "ed_key_exchange.h"
 #include "ed_keypair.h"
