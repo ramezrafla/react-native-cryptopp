@@ -1,3 +1,5 @@
+#include "ed_fixedint.h"
+
 #ifndef SC_H
 #define SC_H
 

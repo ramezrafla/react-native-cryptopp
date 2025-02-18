@@ -1,3 +1,5 @@
+#include "ed_precomp_data.h"
+
 #ifndef GE_H
 #define GE_H
 

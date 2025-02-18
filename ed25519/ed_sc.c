@@ -1,4 +1,3 @@
-#include "ed_fixedint.h"
 #include "ed_sc.h"
 
 static uint64_t load_3(const unsigned char *in) {

@@ -1,5 +1,4 @@
 #include "ed_seed.h"
-#include <stdio.h>
 
 int ed25519_create_seed(unsigned char *seed) {
     FILE *f = fopen("/dev/urandom", "rb");
