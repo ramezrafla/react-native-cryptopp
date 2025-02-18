@@ -8,6 +8,7 @@
  *
  * Tom St Denis, tomstdenis@gmail.com, http://libtom.org
  */
+#include "ed_sha512.h"
 
 /* the K array */
 static const uint64_t K[80] = {
@@ -56,33 +57,33 @@ static const uint64_t K[80] = {
 /* Various logical functions */
 
 #define ROR64c(x, y) \
-    ( (((x& 0xFFFFFFFFFFFFFFFF)>>((uint64_t)y& 63)) | \
-      (x<<((uint64_t)(64-(y& 63))))) & 0xFFFFFFFFFFFFFFFF)
-
-#define STORE64H(x, y)                                                                     \
-   { y[0] = (unsigned char)((x>>56)&255); y[1] = (unsigned char)((x>>48)&255);     \
-     y[2] = (unsigned char)((x>>40)&255); y[3] = (unsigned char)((x>>32)&255);     \
-     y[4] = (unsigned char)((x>>24)&255); y[5] = (unsigned char)((x>>16)&255);     \
-     y[6] = (unsigned char)((x>>8)&255); y[7] = (unsigned char)(x&255); }
-
-#define LOAD64H(x, y)                                                      \
-   { x = (((uint64_t)(y[0] & 255))<<56)|(((uint64_t)(y[1] & 255))<<48) | \
-         (((uint64_t)(y[2] & 255))<<40)|(((uint64_t)(y[3] & 255))<<32) | \
-         (((uint64_t)(y[4] & 255))<<24)|(((uint64_t)(y[5] & 255))<<16) | \
-         (((uint64_t)(y[6] & 255))<<8)|(((uint64_t)(y[7] & 255))); }
-
+    (((((uint64_t)x& 0xFFFFFFFFFFFFFFFF)>>((uint64_t)y& 63)) | \
+      ((uint64_t)x<<((uint64_t)(64-((uint64_t)y& 63))))) & 0xFFFFFFFFFFFFFFFF)
 
 #define Ch(x,y,z)       (z ^ (x & (y ^ z)))
 #define Maj(x,y,z)      (((x | y) & z) | (x & y)) 
 #define S(x, n)         ROR64c(x, n)
 #define R(x, n)         ((x & 0xFFFFFFFFFFFFFFFF)>>((uint64_t)n))
-#define Sigma0x       (S(x, 28) ^ S(x, 34) ^ S(x, 39))
-#define Sigma1x       (S(x, 14) ^ S(x, 18) ^ S(x, 41))
-#define Gamma0x       (S(x, 1) ^ S(x, 8) ^ R(x, 7))
-#define Gamma1x       (S(x, 19) ^ S(x, 61) ^ R(x, 6))
+#define Sigma0(x)       (S(x, 28) ^ S(x, 34) ^ S(x, 39))
+#define Sigma1(x)       (S(x, 14) ^ S(x, 18) ^ S(x, 41))
+#define Gamma0(x)       (S(x, 1) ^ S(x, 8) ^ R(x, 7))
+#define Gamma1(x)       (S(x, 19) ^ S(x, 61) ^ R(x, 6))
 #ifndef MIN
    #define MIN(x, y) ( (x<y)?x:y )
 #endif
+
+// converted from macro to regular function
+void STORE64H(uint64_t x, unsigned char* y) {
+   *y = (unsigned char)((x>>56)&255);
+   *(y+1) = (unsigned char)((x>>48)&255);
+   *(y+2) = (unsigned char)((x>>40)&255);
+   *(y+3) = (unsigned char)((x>>32)&255);
+   *(y+4) = (unsigned char)((x>>24)&255);
+   *(y+5) = (unsigned char)((x>>16)&255);
+   *(y+6) = (unsigned char)((x>>8)&255);
+   *(y+7) = (unsigned char)(x&255);
+}
+
 
 /* compress 1024-bits */
 static int sha512_compress(sha512_context *md, unsigned char *buf)
@@ -96,16 +97,27 @@ static int sha512_compress(sha512_context *md, unsigned char *buf)
     }
 
     /* copy the state into 1024-bits into W[0..15] */
+    // used to be a macro LOADH64 which failed when building on Android
+    unsigned char *y;
     for (i = 0; i < 16; i++) {
-        LOAD64H(W[i], buf + (8*i));
+        y = buf + (8*i);
+        W[i] =
+            (((uint64_t)(*y & 255))<<56) |
+            (((uint64_t)(*(y+1) & 255))<<48) |
+            (((uint64_t)(*(y+2) & 255))<<40) |
+            (((uint64_t)(*(y+3) & 255))<<32) |
+            (((uint64_t)(*(y+4) & 255))<<24) |
+            (((uint64_t)(*(y+5) & 255))<<16) |
+            (((uint64_t)(*(y+6) & 255))<<8) |
+            (((uint64_t)(*(y+7) & 255)));
     }
 
     /* fill W[16..79] */
     for (i = 16; i < 80; i++) {
         W[i] = Gamma1(W[i - 2]) + W[i - 7] + Gamma0(W[i - 15]) + W[i - 16];
-    }        
+    }
 
-/* Compress */
+    /* Compress */
     #define RND(a,b,c,d,e,f,g,h,i) \
     t0 = h + Sigma1(e) + Ch(e, f, g) + K[i] + W[i]; \
     t1 = Sigma0(a) + Maj(a, b, c);\

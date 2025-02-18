@@ -343,15 +343,13 @@ namespace rncryptopp::ed25519 {
 
     unsigned char seed[32], public_key[32], private_key[64];
 
-    if (ed25519_create_seed(seed)) {
-      printf("error while generating seed\n");
-      return;
-    }
+    if (ed25519_create_seed(seed))
+      throw facebook::jsi::JSError(rt, "error while generating seed");
   
     ed25519_create_keypair(public_key, private_key, seed);
 
-    std::string d(private_key);
-    std::string x(public_key);
+    std::string d(&private_key[0], &private_key[63]);
+    std::string x(&public_key[0], &public_key[31]);
 
     return ED25519KeyPair{
       .d = d,
@@ -376,12 +374,13 @@ namespace rncryptopp::ed25519 {
     std::string d = args->at(1).stringValue;
     std::string x = args->at(2).stringValue;
     std::string message = args->at(3).stringValue;
-    std::string target = args->at(4).stringValue;
 
+    (*target).resize(32);
+  
     ed25519_sign(
-      (unsigned char *)(target.c_str()),
-      (unsigned char*)(m.c_str()), m.length(),
-      (unsigned char*)(x.c_str()), (unsigned char*)(d._str())
+      (unsigned char *)(target->c_str()),
+      (unsigned char*)(message.c_str()), message.length(),
+      (unsigned char*)(x.c_str()), (unsigned char*)(d.c_str())
     );
 
     *targetType = args->at(1).dataType;
@@ -389,7 +388,7 @@ namespace rncryptopp::ed25519 {
   }
 
   void verify(jsi::Runtime &rt, CppArgs *args, bool *target, QuickDataType *targetType) {
-    if (args->size() != 3)
+    if (args->size() != 4)
       throw facebook::jsi::JSError(rt, "RNCryptopp: ED25519 verify invalid number of arguments");
 
     if (!isDataStringOrAB(args->at(1)))
@@ -406,9 +405,9 @@ namespace rncryptopp::ed25519 {
     std::string message = args->at(3).stringValue;
 
     int result = ed25519_verify(
-      (const unsigned char *)(signature.c_str()),
-      (const unsigned char *)(message.c_str()), message.length(),
-      (const unsigned char *)(x.c_str())
+      (unsigned char *)(signature.c_str()),
+      (unsigned char *)(message.c_str()), message.length(),
+      (unsigned char *)(x.c_str())
     );
 
     *target = result > 0;

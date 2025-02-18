@@ -1,1 +1,3 @@
-int ed25519_create_seed(unsigned char *seed);
+extern "C" {
+  int ed25519_create_seed(unsigned char *seed);
+}

@@ -8,7 +8,7 @@
 
 /* state */
 typedef struct sha512_context_ {
-    std::uint64_t  length, state[8];
+    std::uint64_t length, state[8];
     size_t curlen;
     unsigned char buf[128];
 } sha512_context;
