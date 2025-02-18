@@ -215,7 +215,7 @@ case "$ANDROID_CPU" in
 
     ANDROID_CXXFLAGS="-target armv7-none-linux-androideabi${ANDROID_API}"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -march=armv7-a -mthumb"
-    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++11 -stdlib=libc++"
+    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++17 -stdlib=libc++"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fstack-protector-strong -funwind-tables -fexceptions -frtti"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fno-addrsig -fno-experimental-isel"
     ;;
@@ -232,7 +232,7 @@ case "$ANDROID_CPU" in
     ANDROID_CFLAGS="${ANDROID_CFLAGS} -fno-addrsig -fno-experimental-isel"
 
     ANDROID_CXXFLAGS="-target aarch64-none-linux-android${ANDROID_API}"
-    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++11 -stdlib=libc++"
+    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++17 -stdlib=libc++"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fstack-protector-strong -funwind-tables -fexceptions -frtti"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fno-addrsig -fno-experimental-isel"
     ;;
@@ -250,7 +250,7 @@ case "$ANDROID_CPU" in
 
     ANDROID_CXXFLAGS="-target i686-none-linux-android${ANDROID_API}"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -march=i686 -mssse3 -mfpmath=sse"
-    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++11 -stdlib=libc++"
+    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++17 -stdlib=libc++"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fstack-protector-strong -funwind-tables -fexceptions -frtti"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fno-addrsig -fno-experimental-isel"
     ;;
@@ -269,7 +269,7 @@ case "$ANDROID_CPU" in
 
     ANDROID_CXXFLAGS="-target x86_64-none-linux-android${ANDROID_API}"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -march=x86-64 -msse4.2 -mpopcnt"
-    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++11 -stdlib=libc++"
+    ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -std=c++17 -stdlib=libc++"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fstack-protector-strong -funwind-tables -fexceptions -frtti"
     ANDROID_CXXFLAGS="${ANDROID_CXXFLAGS} -fno-addrsig -fno-experimental-isel"
     ;;
