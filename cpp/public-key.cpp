@@ -348,12 +348,10 @@ namespace rncryptopp::ed25519 {
     ed25519_create_keypair(public_key, private_key, seed);
 
     std::string d;
-    d.resize(64);
-    memcpy((unsigned char *) d.c_str(), (unsigned char *) &private_key[0], 64);
+    StringSource((byte *)&private_key[0], 64, true, new Base64URLEncoder(new StringSink(d)));
 
     std::string x;
-    x.resize(32);
-    memcpy((unsigned char *) x.c_str(), (unsigned char *) &public_key[0], 32);
+    StringSource((byte *)&public_key[0], 32, true, new Base64URLEncoder(new StringSink(x)));
 
     return ED25519KeyPair{
       .d = d,
